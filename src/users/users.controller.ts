@@ -10,7 +10,6 @@ import {
   NotFoundException,
   Session,
   UseGuards,
-  ValidationPipe,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user-dto';
 import { UsersService } from './users.service';
@@ -20,10 +19,11 @@ import { UserDto } from './dtos/users-dto';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dtos/login-user-dto';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { ForgotPasswordDto } from './dtos/users-forgotpassword';
-
+import { User } from './users.entity';
+import { CurrentUser } from './decorator/current-user.decorator';
+// import { CurrentUserInterceptor } from './decorator/current-user.decorator';
 @Controller('users')
-@Serialize(UserDto)
+// @Serialize(UserDto)
 export class UsersController {
   constructor(
     private userService: UsersService,
@@ -39,9 +39,12 @@ export class UsersController {
   @Post('/signin')
   async signinUser(
     @Body() body: LoginUserDto,
-  ): Promise<{ accessToken: string }> {
+    @Session() session: any,
+  ): Promise<{ accessToken: string; user: User }> {
     console.log('signinUser - Received body:', body);
+    // const user = await this.authService.signin(body.email, body.password);
     const token = await this.authService.signin(body);
+    session.userId = token.user.id;
     console.log('signinUser - Token:', token);
     return token;
   }
@@ -52,19 +55,17 @@ export class UsersController {
   }
 
   // @UseInterceptors(new Serialize(UserDto))
-  @Get(':slug')
+  @Get('/:id')
   async findUser(@Param('slug') slug: string) {
-    console.log('handler is running');
-    const user = await this.userService.findId(slug);
+    const user = await this.userService.findBySlug(slug);
     if (!user) {
       throw new NotFoundException('user not found');
     }
-
     return user;
   }
 
   @Get()
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   findAllUsers(@Query('email') email: string) {
     return this.userService.find(email);
   }
@@ -78,6 +79,14 @@ export class UsersController {
   updateUser(@Param('slug') slug: string, @Body() body: UpdateUserDto) {
     return this.userService.update(slug, body);
   }
+
+  @Get('/whoami')
+  @UseGuards(AuthGuard)
+  whoAmI(@CurrentUser() user: User) {
+    return user;
+  }
+
+
   // @Post(':slug/forgotPassword')
   // async forgotPassword(@Body() emai: string){
   //    this.forgotPassword(@Body()(new ValidationPipe())){

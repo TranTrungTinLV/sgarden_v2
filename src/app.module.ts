@@ -4,6 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/users.entity';
 import { ProductModule } from './product/product.module';
 import { Product } from './product/product.entity';
+import { CategoryModule } from './category/category.module';
+import { CategoryEntity } from './category/category.entity';
+import { OderModule } from './oder/oder.module';
+import { Oder } from './oder/oder.entity';
 
 @Module({
   imports: [
@@ -13,10 +17,12 @@ import { Product } from './product/product.entity';
       database: 'sgarden',
       port: 27017,
       host: '127.0.0.1',
-      entities: [User, Product],
+      entities: [User, Product, CategoryEntity, Oder],
       synchronize: true,
     }),
     ProductModule,
+    CategoryModule,
+    OderModule,
   ],
   controllers: [],
   providers: [],

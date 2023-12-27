@@ -61,10 +61,11 @@ export class AuthService {
     return user;
   }
 
-
-  async signin(loginUserDto: LoginUserDto): Promise<{ accessToken: string }> {
+  async signin(
+    loginUserDto: LoginUserDto,
+  ): Promise<{ accessToken: string; user: User }> {
     const { email, password } = loginUserDto;
-    // const user1 = await this.userService.find(email);
+
     const [user] = await this.userService.find(email);
     if (!user) {
       throw new NotFoundException('user not found');
@@ -78,10 +79,10 @@ export class AuthService {
     }
     // const user1 = await this.repo.findOne({where:{email}});
     // if (user) {
-      const payload: JwtPayload = { email };
-      const accessToken: string = await this.jwtService.sign(payload);
-      console.log(accessToken);
-      return { accessToken };
+    const payload: JwtPayload = { email };
+    const accessToken: string = await this.jwtService.sign(payload);
+    console.log(accessToken);
+    return { user, accessToken };
     // } else {
     //   throw new UnauthorizedException('Please check your login credentials');
     // }

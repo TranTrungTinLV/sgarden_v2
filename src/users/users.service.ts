@@ -32,11 +32,11 @@ export class UsersService {
     }
   }
 
-  async findId(slug: string): Promise<User> {
+  async findBySlug(slug: string) {
     if (!slug) {
       return null;
     }
-    return await this.repo.findOne({ where: { slug } });
+    return this.repo.findOneBy({ slug });
   }
 
   async find(email: string) {
@@ -46,7 +46,7 @@ export class UsersService {
   }
 
   async update(slug: string, attrs: Partial<User>) {
-    const user = await this.findId(slug);
+    const user = await this.findBySlug(slug);
     if (!user) {
       throw new NotFoundException('user not found');
     }

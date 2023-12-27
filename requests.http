@@ -1,0 +1,28 @@
+POST http://localhost:3000/products
+content-type: application/json
+
+###
+GET http://localhost:3000/users/whoami
+
+###
+POST http://localhost:3000/users/signup
+content-type: application/json
+
+{
+     "username": "hongbiet",
+    "email": "levi@gmail.com",
+    "password": "123"
+}
+
+###
+POST http://localhost:3000/users/signin
+content-type: application/json
+
+{
+    "username": "hongbiet",
+    "email": "levi@gmail.com",
+    "password": "123"
+}
+
+###
+POST http://localhost:3000/users/signout

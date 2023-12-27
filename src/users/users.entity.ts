@@ -9,12 +9,14 @@ import {
   AfterInsert,
   AfterUpdate,
   AfterRemove,
+  OneToMany,
 } from 'typeorm';
 import { ObjectId } from 'mongodb';
+import { Oder } from 'src/oder/oder.entity';
 @Entity()
 export class User {
   @ObjectIdColumn()
-  id: ObjectId;
+  id: number;
 
   @PrimaryGeneratedColumn('uuid')
   @Index()
@@ -38,6 +40,9 @@ export class User {
 
   @Column()
   phone: string;
+
+  @OneToMany(() => Oder, (orders) => orders.user)
+  orders: Oder[];
 
   @AfterInsert()
   loginInsert() {
