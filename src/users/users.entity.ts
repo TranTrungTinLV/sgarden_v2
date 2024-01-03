@@ -12,7 +12,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { ObjectId } from 'mongodb';
-import { Oder } from 'src/oder/oder.entity';
+import { Order } from 'src/oder/oder.entity';
 @Entity()
 export class User {
   @ObjectIdColumn()
@@ -41,8 +41,10 @@ export class User {
   @Column()
   phone: string;
 
-  @OneToMany(() => Oder, (orders) => orders.user)
-  orders: Oder[];
+  @Column({default:true})
+  admin: boolean
+  @OneToMany((_type) => Order, (orders) => orders.user, { eager: true })
+  orders: Order[];
 
   @AfterInsert()
   loginInsert() {

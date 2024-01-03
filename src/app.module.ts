@@ -7,7 +7,7 @@ import { Product } from './product/product.entity';
 import { CategoryModule } from './category/category.module';
 import { CategoryEntity } from './category/category.entity';
 import { OderModule } from './oder/oder.module';
-import { Oder } from './oder/oder.entity';
+import { Order } from './oder/oder.entity';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { Oder } from './oder/oder.entity';
       database: 'sgarden',
       port: 27017,
       host: '127.0.0.1',
-      entities: [User, Product, CategoryEntity, Oder],
+      entities: [User, Product, CategoryEntity, Order],
       synchronize: true,
     }),
     ProductModule,

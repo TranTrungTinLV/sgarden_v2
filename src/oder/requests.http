@@ -1,0 +1,7 @@
+POST http://localhost:3000/oders
+content-type: application/json
+
+{
+    "total_price":10,
+    "total_pay":"20"
+}

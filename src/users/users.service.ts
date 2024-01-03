@@ -32,11 +32,11 @@ export class UsersService {
     }
   }
 
-  async findBySlug(slug: string) {
+  async findBySlug(slug: string): Promise<User | undefined> {
     if (!slug) {
       return null;
     }
-    return this.repo.findOneBy({ slug });
+    return this.repo.findOne({ where: { slug } });
   }
 
   async find(email: string) {

@@ -1,12 +1,24 @@
 import { ObjectId } from 'mongodb';
 import { User } from 'src/users/users.entity';
-import { Column, Entity, ManyToOne, ObjectIdColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  ManyToOne,
+  ObjectIdColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { OrderStatus, Types } from './order.model';
+import { Exclude } from 'class-transformer';
 
 @Entity()
-export class Oder {
+export class Order {
   @ObjectIdColumn()
   id: ObjectId;
+  @PrimaryGeneratedColumn()
+  slug: number;
   @Column()
+  // @Index()
   customer_id: string;
   @Column()
   products: {
@@ -14,6 +26,9 @@ export class Oder {
     quantity: number;
     size: string;
   };
+
+  @Column({ default: false })
+  approved: boolean;
 
   @Column('float')
   total_price: number;
@@ -25,14 +40,17 @@ export class Oder {
   total_pay: number;
 
   @Column()
-  type: 'delivery' | 'inPlace';
+  type: Types;
 
   @Column()
   QRCode: string;
 
   @Column()
-  payment_status: 'pending' | 'confirm';
+  payment_status: OrderStatus;
 
-  @ManyToOne(() => User, (user) => user.orders)
+  @ManyToOne((_type) => User, (user) => user, { eager: false })
+  @Exclude({
+    toPlainOnly: true,
+  })
   user: User;
 }
