@@ -5,6 +5,7 @@ import { IntroductionModule } from "./introduction/introduction.module";
 import { InformationModule } from './information/information.module';
 import { AuthModule } from './auth/auth.module';
 import { OderModule } from './oder/oder.module';
+import { ProductModule } from './product/product.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -18,6 +19,7 @@ import { OderModule } from './oder/oder.module';
     InformationModule,
     AuthModule,
     OderModule,
+    ProductModule,
   ],
 })
 export class AppModule {}

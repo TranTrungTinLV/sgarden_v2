@@ -8,7 +8,10 @@ import {
   Put,
   Query,
   Req,
+  UploadedFile,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { OrderService } from './oder.service';
 import { Order } from './schema/oder.schema';
@@ -17,6 +20,8 @@ import { oderDto } from './dto/oder-dto';
 
 import { ApiTags } from '@nestjs/swagger';
 import { updateOderDto } from './dto/updateOder-dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 // import { Query as ExpressQuery } from 'express-serve-static-core';
 @ApiTags('Order')
 @Controller('order')

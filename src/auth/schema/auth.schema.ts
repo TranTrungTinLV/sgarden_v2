@@ -36,6 +36,8 @@ export class User {
   fullname: string;
   @Prop()
   score: string; //edit late
+  @Prop()
+  
   @Prop({
     type: String,
     default:

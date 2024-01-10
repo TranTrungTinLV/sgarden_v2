@@ -13,7 +13,7 @@ export class AuthService {
     private userModel: Model<User>,
     private jwtService: JwtService,
   ) {}
-  async signUp(signupDto: SignupDto): Promise<{ token: string }> {
+  async signUp(signupDto: SignupDto): Promise<{ token: string; user: User }> {
     const {
       username,
       password,
@@ -41,10 +41,10 @@ export class AuthService {
     const token = this.jwtService.sign({
       id: user._id,
     });
-    return { token };
+    return { token, user };
   }
 
-  async login(loginDto: LoginDto): Promise<{ token: string }> {
+  async login(loginDto: LoginDto): Promise<{ token: string; user: User }> {
     const { email, password } = loginDto;
 
     const user = await this.userModel.findOne({ email });
@@ -61,6 +61,9 @@ export class AuthService {
     const token = this.jwtService.sign({
       id: user._id,
     });
-    return { token };
+    return { token, user };
   }
+
+
+
 }

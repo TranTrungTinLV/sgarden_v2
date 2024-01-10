@@ -49,6 +49,8 @@ export class Order {
   })
   payment_status: OrderStatus;
 
+  @Prop()
+  images?: object[];
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   user: User;
 }
