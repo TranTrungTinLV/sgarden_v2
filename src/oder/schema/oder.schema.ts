@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
-import { User } from 'src/auth/schema/auth.schema';
+import mongoose, { Types } from 'mongoose';
+import { User } from '../../users/schema/users.schema';
 import { v4 } from 'uuid';
 
 export enum OrderStatus {
@@ -8,7 +8,7 @@ export enum OrderStatus {
   CONFIRM = 'confirm',
 }
 
-export enum Types {
+export enum Type {
   DELIVERY = 'delivery',
   INPLACE = 'inplace',
 }
@@ -36,10 +36,10 @@ export class Order {
   total_price: string;
   @Prop({
     type: String,
-    enum: Types,
-    default: Types.DELIVERY,
+    enum: Type,
+    default: Type.DELIVERY,
   })
-  type: Types;
+  type: Type;
   // @Prop()
   // QRCode: string;
   @Prop({
@@ -51,8 +51,16 @@ export class Order {
 
   @Prop()
   images?: object[];
+
+  
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   user: User;
+
+  // Relationship: Many-to-Many with Product
+  @Prop([
+    { product: { type: Types.ObjectId, ref: 'Product' }, quantity: Number },
+  ])
+  products: { product: Types.ObjectId; quantity: number }[];
 }
 
 export const OderSchema = SchemaFactory.createForClass(Order);

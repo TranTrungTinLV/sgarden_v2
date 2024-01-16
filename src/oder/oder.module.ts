@@ -4,10 +4,11 @@ import { OrderService } from './oder.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { OderSchema } from './schema/oder.schema';
 import { AuthModule } from 'src/auth/auth.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
-    AuthModule,
+    UsersModule,
     MongooseModule.forFeature([
       {
         name: 'Order',
