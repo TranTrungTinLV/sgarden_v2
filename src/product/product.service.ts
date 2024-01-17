@@ -10,5 +10,16 @@ export class ProductService {
     @InjectModel(Product.name)
     private readonly productModel: Model<Product>,
   ) {}
-//   async create(createProductDto:CreateProductDto,images)
+  async createProduct(createProductDto: CreateProductDto): Promise<Product> {
+    const newProduct = new this.productModel(createProductDto);
+    return newProduct.save();
+  }
+
+  async findAllProducts(): Promise<Product[]> {
+    return this.productModel.find();
+  }
+
+  async findByIdProduct(productId: string): Promise<Product> {
+    return this.productModel.findById(productId);
+  }
 }

@@ -52,15 +52,12 @@ export class Order {
   @Prop()
   images?: object[];
 
-  
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   user: User;
 
   // Relationship: Many-to-Many with Product
-  @Prop([
-    { product: { type: Types.ObjectId, ref: 'Product' }, quantity: Number },
-  ])
-  products: { product: Types.ObjectId; quantity: number }[];
+  @Prop([{ type: Types.ObjectId, ref: 'Product' }])
+  products: Types.ObjectId[];
 }
 
 export const OderSchema = SchemaFactory.createForClass(Order);

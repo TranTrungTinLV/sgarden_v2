@@ -10,8 +10,8 @@ export class Product extends Document {
   @Prop({ type: Types.ObjectId, ref: 'Category' })
   category_id: Types.ObjectId;
 
-  @Prop({})
-  images?: Buffer;
+  @Prop([String])
+  images?: string[];
 
   @Prop()
   price_original: number;
@@ -23,8 +23,8 @@ export class Product extends Document {
   @Prop([Object])
   reviews: Record<string, any>[];
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  invertor: User; //admin & staff
+  @Prop({ type: User, ref: 'User' })
+  owner: User; //admin & staff
 
   @Prop({ default: false, type: Boolean })
   isPublished: boolean;

@@ -15,11 +15,7 @@ export class UsersService {
   }
 
   async findOne(username: string) {
-    const user = await this.UserModel.findOne({
-      where: { username: username },
-      select: { id: true, username: true, role: true },
-    });
-    return user;
+    return await this.UserModel.findOne({ username }).select('id username role');
   }
 
   async findOneWithPassword(username: string) {

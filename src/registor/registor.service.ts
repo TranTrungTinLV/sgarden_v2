@@ -5,7 +5,6 @@ import * as crypto from 'crypto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateRegistorDto } from './dto/create-registor.dto';
-
 @Injectable()
 export class RegistorService {
   constructor(
@@ -27,6 +26,8 @@ export class RegistorService {
       level_member,
       fullname,
       avatar,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      role,
     } = signUpDto;
 
     // Check if the username or email is already taken
@@ -52,6 +53,7 @@ export class RegistorService {
       level_member,
       fullname,
       avatar,
+      role
     });
     await user.save();
 

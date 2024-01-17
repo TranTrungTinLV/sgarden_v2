@@ -47,9 +47,10 @@ export class User {
   @Prop({
     type: String,
     enum: Role,
-    default: 'user',
+    default: Role.User,
   })
   role: Role;
+
   @Prop({
     type: String,
     default:
@@ -57,8 +58,9 @@ export class User {
   })
   avatar: string;
 
+  //One to Many
   @Prop({ type: Types.ObjectId, ref: 'Order' })
-  orders: Order;
+  orders: Order[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

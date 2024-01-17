@@ -1,11 +1,14 @@
 import {
   IsBoolean,
   IsEmail,
+  IsEnum,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
   MinLength,
 } from 'class-validator';
+import { Role } from 'src/users/schema/users.schema';
 
 export class CreateRegistorDto {
   @IsNotEmpty()
@@ -46,4 +49,8 @@ export class CreateRegistorDto {
 
   @IsString()
   readonly avatar: string;
+
+  @IsString()
+  @IsOptional()
+  readonly role: string;
 }
