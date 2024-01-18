@@ -55,7 +55,7 @@ export class AuthService {
       throw new UnauthorizedException("lỗi òi");
     }
     // The "sub" (subject) claim identifies the principal that is the subject of the JWT
-    const payload = { username: username, sub: user.id };
+    const payload = { username: username, sub: user._id };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };

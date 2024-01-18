@@ -10,21 +10,20 @@ export class Product extends Document {
   @Prop({ type: Types.ObjectId, ref: 'Category' })
   category_id: Types.ObjectId;
 
-  @Prop([String])
+  @Prop({ type: [String], required: true })
   images?: string[];
 
-  @Prop()
+  @Prop({ required: true })
   price_original: number;
 
-  @Prop()
-  @Prop()
+  @Prop({ required: true })
   price_new: number;
 
   @Prop([Object])
   reviews: Record<string, any>[];
 
-  @Prop({ type: User, ref: 'User' })
-  owner: User; //admin & staff
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  owner: mongoose.Types.ObjectId;
 
   @Prop({ default: false, type: Boolean })
   isPublished: boolean;

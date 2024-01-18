@@ -40,8 +40,8 @@ export class AuthGuard implements CanActivate {
       // so that we can access it in our route handlers
       request['user'] = payload;
     } catch {
-      console.log("Loi")
-      throw new UnauthorizedException();
+      // console.log("Bạn không có")
+      throw new UnauthorizedException("Không có quyền");
     }
     return true;
   }

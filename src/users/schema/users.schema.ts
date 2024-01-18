@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Types } from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
 import { Order } from 'src/oder/schema/oder.schema';
+import { Product } from 'src/product/schema/product.schema';
 
 export enum Role {
   User = 'user',
@@ -11,7 +12,7 @@ export enum Role {
 @Schema({
   timestamps: true,
 })
-export class User {
+export class User extends Document {
   @Prop({
     required: [true, 'Please enter userName'],
   })
@@ -61,6 +62,10 @@ export class User {
   //One to Many
   @Prop({ type: Types.ObjectId, ref: 'Order' })
   orders: Order[];
+
+  //One to Many
+  @Prop({ type: Types.ObjectId, ref: 'Product' })
+  product: Product[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
