@@ -5,6 +5,7 @@ import * as crypto from 'crypto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateRegistorDto } from './dto/create-registor.dto';
+
 @Injectable()
 export class RegistorService {
   constructor(
@@ -53,11 +54,11 @@ export class RegistorService {
       level_member,
       fullname,
       avatar,
-      role
+      role,
     });
     await user.save();
 
-    const payload = { username: username, sub: user._id };
+    const payload = { username: username, sub: user.id };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };

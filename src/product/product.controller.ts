@@ -30,5 +30,4 @@ export class ProductController {
   async getAllProducts(): Promise<Product[]> {
     return this.productService.findAllProducts();
   }
-  
 }

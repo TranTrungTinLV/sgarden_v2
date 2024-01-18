@@ -1,13 +1,17 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
-import { IntroductionModule } from "./introduction/introduction.module";
+import { IntroductionModule } from './introduction/introduction.module';
 import { InformationModule } from './information/information.module';
 import { AuthModule } from './auth/auth.module';
 import { OderModule } from './oder/oder.module';
 import { ProductModule } from './product/product.module';
 import { UsersModule } from './users/users.module';
 import { RegistorModule } from './registor/registor.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+
+// import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     ConfigModule.forRoot({

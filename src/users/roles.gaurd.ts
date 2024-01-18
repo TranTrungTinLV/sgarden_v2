@@ -33,7 +33,7 @@ export class RolesGuard implements CanActivate {
     const role = (await this.usersService.findOne(user?.username))?.role;
 
     if (!requiredRoles.includes(role)) {
-      // console.log("loi")
+      console.log("loi")
       throw new UnauthorizedException();
     }
     return true;
