@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+
 import { User } from '../../users/schema/users.schema';
 
 export enum OrderStatus {
@@ -21,18 +22,11 @@ export class Order extends Document {
 
   @Prop([{ type: Types.ObjectId, ref: 'Product' }])
   products: Types.ObjectId[];
-  // @Prop([
-  //   {
-  //     product_id: String,
-  //     quantity: Number,
-  //     size: String,
-  //   },
-  // ])
-  // products: Record<string, any>[];
-  @Prop({ required: [true, 'Nhap di ba'] })
+
+  @Prop({ required: [false, 'Nhap di ba'] })
   total_price: number;
 
-  @Prop({ required: [true, 'Nhap di ba'] })
+  @Prop({ required: [false, 'Nhap di ba'] })
   total_pay: number;
 
   @Prop({

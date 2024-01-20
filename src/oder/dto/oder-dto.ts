@@ -1,4 +1,12 @@
-import { ArrayNotEmpty, IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { IsMongoId } from 'class-validator';
+
 import { OrderStatus, Type } from '../schema/oder.schema';
 
 export class oderDto {
@@ -12,17 +20,15 @@ export class oderDto {
 
   // readonly QRCode: string;
 
-  @IsNotEmpty()
+  // @IsNotEmpty()
   @IsNumber()
   readonly total_price: number;
 
-  @IsNotEmpty()
   @IsNumber()
   readonly total_pay: number;
 
   @IsNotEmpty()
   @IsArray()
-  @ArrayNotEmpty()
-//   @Each(IsString())
+  @IsMongoId({ each: true })
   products: string[];
 }

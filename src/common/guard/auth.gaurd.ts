@@ -4,9 +4,10 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Request } from 'express';
-import { JwtService } from '@nestjs/jwt';
 import { Reflector } from '@nestjs/core';
+import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
+
 import { IS_PUBLIC_KEY } from '../decorators/public.decorations';
 
 @Injectable()

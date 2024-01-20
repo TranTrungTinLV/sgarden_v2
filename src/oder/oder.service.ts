@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Order, OrderStatus } from './schema/oder.schema';
 import * as mongoose from 'mongoose';
+import { Product } from 'src/product/schema/product.schema';
+
 // import { UpdateOrderDto, oderDto } from './dto/oder-dto';
 import { User } from '../users/schema/users.schema';
 import { oderDto } from './dto/oder-dto';
-import { Product } from 'src/product/schema/product.schema';
+import { Order, OrderStatus } from './schema/oder.schema';
 
 @Injectable()
 export class OrderService {
@@ -17,6 +18,9 @@ export class OrderService {
   ) {}
 
   async createOrder(user: User, createOrderDto: oderDto): Promise<Order> {
+    if (!createOrderDto || !createOrderDto.products) {
+      throw new NotFoundException('Order data is missing');
+    }
     const { products } = createOrderDto;
 
     // Validate products
@@ -38,6 +42,7 @@ export class OrderService {
 
     return order.save();
   }
+
   async findAll(): Promise<Order[]> {
     const order = this.orderModel.find();
     return order;

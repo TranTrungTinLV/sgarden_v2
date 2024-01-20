@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ProductSchema } from 'src/product/schema/product.schema';
+import { UserSchema } from 'src/users/schema/users.schema';
+import { UsersModule } from 'src/users/users.module';
+
 import { OderController } from './oder.controller';
 import { OrderService } from './oder.service';
-import { MongooseModule } from '@nestjs/mongoose';
 import { OderSchema } from './schema/oder.schema';
-import { UsersModule } from 'src/users/users.module';
-import { UserSchema } from 'src/users/schema/users.schema';
-import { ProductSchema } from 'src/product/schema/product.schema';
 
 @Module({
   imports: [
