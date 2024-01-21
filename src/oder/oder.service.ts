@@ -36,7 +36,7 @@ export class OrderService {
     const order = new this.orderModel({
       customer: user._id,
       products: product.map((product) => product._id),
-      total,
+      total_price: total,
       status: OrderStatus.PENDING,
     });
 

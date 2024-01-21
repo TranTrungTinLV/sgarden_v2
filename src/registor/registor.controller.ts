@@ -1,16 +1,17 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
   UseGuards,
 } from '@nestjs/common';
-import { RegistorService } from './registor.service';
-import { CreateRegistorDto } from './dto/create-registor.dto';
 import { Public } from 'src/common/decorators/public.decorations';
+
+import { CreateRegistorDto } from './dto/create-registor.dto';
+import { RegistorService } from './registor.service';
 // import { UpdateRegistorDto } from './dto/update-registor.dto';
 
 // @UseGuards)

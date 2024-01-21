@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { IntroductionModule } from './introduction/introduction.module';
-import { InformationModule } from './information/information.module';
+import { MongooseModule } from '@nestjs/mongoose';
+
 import { AuthModule } from './auth/auth.module';
+import { InformationModule } from './information/information.module';
+import { IntroductionModule } from './introduction/introduction.module';
 import { OderModule } from './oder/oder.module';
 import { ProductModule } from './product/product.module';
-import { UsersModule } from './users/users.module';
 import { RegistorModule } from './registor/registor.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [

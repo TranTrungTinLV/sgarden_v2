@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { UserSchema } from 'src/users/schema/users.schema';
 // import { JwtStrategy } from './jwt.strategy';
 import { UsersService } from 'src/users/users.service';
-import { UserSchema } from 'src/users/schema/users.schema';
+
 import { RolesGuard } from '../common/guard/roles.gaurd';
-import { APP_GUARD } from '@nestjs/core';
 // import { UsersController } from './users.controller';
 
 @Module({

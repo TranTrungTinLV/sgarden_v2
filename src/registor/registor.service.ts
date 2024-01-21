@@ -1,9 +1,10 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { User } from '../users/schema/users.schema';
 import { JwtService } from '@nestjs/jwt';
-import * as crypto from 'crypto';
 import { InjectModel } from '@nestjs/mongoose';
+import * as crypto from 'crypto';
 import { Model } from 'mongoose';
+
+import { User } from '../users/schema/users.schema';
 import { CreateRegistorDto } from './dto/create-registor.dto';
 
 @Injectable()

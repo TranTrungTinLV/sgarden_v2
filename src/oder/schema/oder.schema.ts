@@ -23,7 +23,7 @@ export class Order extends Document {
   @Prop([{ type: Types.ObjectId, ref: 'Product' }])
   products: Types.ObjectId[];
 
-  @Prop({ required: [false, 'Nhap di ba'] })
+  @Prop({ required: [true, 'Nhap di ba'] })
   total_price: number;
 
   @Prop({ required: [false, 'Nhap di ba'] })
