@@ -30,6 +30,13 @@ export class Product extends Document {
 
   @Prop({ default: false, type: Boolean })
   isPublished: boolean;
+
+  //quản lý số lượng sản phẩm tồn kho.
+  @Prop({ required: true, default: 0 })
+  quantityInStock: number;
+
+  @Prop({ required: true })
+  quantity?: number;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

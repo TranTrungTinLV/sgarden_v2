@@ -18,7 +18,8 @@ export class oderDto {
   @IsOptional()
   readonly payment_status: OrderStatus.PENDING;
 
-  // readonly QRCode: string;
+  @IsString()
+  readonly QRCode: string;
 
   // @IsNotEmpty()
   @IsNumber()
@@ -31,4 +32,7 @@ export class oderDto {
   @IsArray()
   @IsMongoId({ each: true })
   products: string[];
+
+  @IsNumber()
+  readonly quantity?: number;
 }

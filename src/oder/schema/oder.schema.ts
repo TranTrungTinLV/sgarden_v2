@@ -48,6 +48,10 @@ export class Order extends Document {
 
   @Prop()
   images?: object[];
+
+  //cancel
+  @Prop()
+  status: string;
 }
 
 export const OderSchema = SchemaFactory.createForClass(Order);

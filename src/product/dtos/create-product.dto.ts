@@ -22,4 +22,11 @@ export class CreateProductDto {
 
   @IsOptional()
   readonly image?: any;
+
+  @IsNumber()
+  @IsOptional()
+  readonly quantityInStock?: number = 0;
+
+  @IsNumber()
+  readonly quantity?:number;
 }

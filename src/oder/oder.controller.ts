@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Roles } from 'src/common/decators/roles.decorator';
 import { RolesGuard } from 'src/common/guard/roles.gaurd';
 import { Role } from 'src/users/schema/users.schema';
@@ -25,5 +34,20 @@ export class OderController {
   @Roles([Role.Admin, Role.User])
   async getAllProducts(): Promise<Order[]> {
     return this.orderService.findAll();
+  }
+
+  @Patch(':orderId/status')
+  @Roles([Role.Admin, Role.User, Role.Staff]) // Hoặc các role phù hợp
+  async updateOrderStatus(
+    @Param('orderId') orderId: string,
+    @Body('status') status: string,
+  ) {
+    return this.orderService.updateOrderStatus(orderId, status);
+  }
+
+  @Patch(':orderId/cancel')
+  @Roles([Role.Admin, Role.User, Role.Staff]) // Hoặc các role phù hợp
+  async cancelOrder(@Param('orderId') orderId: string) {
+    return this.orderService.cancelOrder(orderId);
   }
 }

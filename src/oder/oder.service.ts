@@ -23,22 +23,39 @@ export class OrderService {
     }
     const { products } = createOrderDto;
 
-    // Validate products
-    const product = await this.productModel.find({ _id: { $in: products } });
-    if (product.length !== products.length) {
-      throw new NotFoundException('One or more products not found');
+    // Validate products and check stock
+    let total = 0;
+    for (const productId of products) {
+      const productItem = await this.productModel.findById(productId);
+      if (!productItem) {
+        throw new NotFoundException(`Product ${productId} not found`);
+      }
+      if (productItem.quantityInStock <= productItem.quantity) {
+        throw new NotFoundException(`Product ${productId} is out of stock`);
+      }
+      total += productItem.price_new;
+      productItem.quantityInStock -= 1; // Giảm số lượng tồn kho
+      await productItem.save();
     }
-
-    // Calculate total price
-    const total = product.reduce((sum, product) => sum + product.price_new, 0);
 
     // Create order
     const order = new this.orderModel({
       customer: user._id,
-      products: product.map((product) => product._id),
+      products: products,
       total_price: total,
       status: OrderStatus.PENDING,
     });
+
+    // // Kiểm tra số lượng tồn kho
+    // for (const productId of createOrderDto.products) {
+    //   const products = await this.productModel.findById(productId);
+    //   if (!product || products.quantityInStock <= createOrderDto.quantity) {
+    //     throw new NotFoundException(`Product ${productId} is out of stock`);
+    //   }
+    //   // Giảm số lượng tồn kho
+    //   products.quantityInStock -= 1;
+    //   await product;
+    // }
 
     return order.save();
   }
@@ -46,5 +63,24 @@ export class OrderService {
   async findAll(): Promise<Order[]> {
     const order = this.orderModel.find();
     return order;
+  }
+
+  async updateOrderStatus(orderId: string, newStatus: string): Promise<Order> {
+    const order = await this.orderModel.findById(orderId);
+    console.log(orderId, 'orderId');
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+    order.status = newStatus;
+    return order.save();
+  }
+
+  async cancelOrder(orderId: string): Promise<Order> {
+    const order = await this.orderModel.findById(orderId);
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+    order.status = 'cancelled';
+    return order.save();
   }
 }
