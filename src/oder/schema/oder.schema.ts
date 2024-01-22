@@ -36,8 +36,11 @@ export class Order extends Document {
   })
   type: Type;
 
-  // @Prop()
-  // QRCode: string;
+  @Prop({
+    type: String,
+    required: false,
+  })
+  QRCode: string;
 
   @Prop({
     type: String,

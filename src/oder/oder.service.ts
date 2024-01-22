@@ -2,11 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Product } from 'src/product/schema/product.schema';
+import { generateQRCode } from 'src/utils/generate_qRcode.ultils';
 
 // import { UpdateOrderDto, oderDto } from './dto/oder-dto';
 import { User } from '../users/schema/users.schema';
 import { oderDto } from './dto/oder-dto';
 import { Order, OrderStatus } from './schema/oder.schema';
+
 
 @Injectable()
 export class OrderService {
@@ -30,7 +32,7 @@ export class OrderService {
       if (!productItem) {
         throw new NotFoundException(`Product ${productId} not found`);
       }
-      if (productItem.quantityInStock <= productItem.quantity) {
+      if (productItem.quantityInStock >= productItem.quantity) {
         throw new NotFoundException(`Product ${productId} is out of stock`);
       }
       total += productItem.price_new;
@@ -46,6 +48,11 @@ export class OrderService {
       status: OrderStatus.PENDING,
     });
 
+    const qrData = {total_price: total, custormer: user.username}
+
+    const qrCode = await generateQRCode(JSON.stringify(qrData));
+
+    order.QRCode = qrCode;
     // // Kiểm tra số lượng tồn kho
     // for (const productId of createOrderDto.products) {
     //   const products = await this.productModel.findById(productId);

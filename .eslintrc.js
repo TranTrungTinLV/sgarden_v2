@@ -28,6 +28,7 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off",
     "simple-import-sort/exports": "error",
     "simple-import-sort/imports": "error",
+    'prettier/prettier': 0,
     
   },
 };
