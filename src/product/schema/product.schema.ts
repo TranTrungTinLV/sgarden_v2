@@ -1,12 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, Types } from 'mongoose';
-import { User } from 'src/users/schema/users.schema';
+// import { User } from 'src/users/schema/users.schema';
 
 @Schema()
 export class Product extends Document {
   @Prop({ required: true })
   name: string;
 
+  //Many to One
   @Prop({ type: Types.ObjectId, ref: 'Category' })
   category_id: Types.ObjectId;
 

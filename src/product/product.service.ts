@@ -4,6 +4,7 @@ import { Product } from './schema/product.schema';
 import { Model } from 'mongoose';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UsersService } from 'src/users/users.service';
+import { Category } from 'src/category/schema/category.schema';
 
 @Injectable()
 export class ProductService {

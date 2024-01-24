@@ -9,6 +9,7 @@ import { OderModule } from './oder/oder.module';
 import { ProductModule } from './product/product.module';
 import { RegistorModule } from './registor/registor.module';
 import { UsersModule } from './users/users.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { UsersModule } from './users/users.module';
     ProductModule,
     UsersModule,
     RegistorModule,
+    CategoryModule,
   ],
 })
 export class AppModule {}

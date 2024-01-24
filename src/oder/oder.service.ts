@@ -72,14 +72,23 @@ export class OrderService {
     return order;
   }
 
-  async updateOrderStatus(orderId: string, newStatus: string): Promise<Order> {
+  // async updateOrderStatus(orderId: string, newStatus: string): Promise<Order> {
+  //   const order = await this.orderModel.findById(orderId);
+  //   console.log(orderId, 'orderId');
+  //   if (!order) {
+  //     throw new NotFoundException('Order not found');
+  //   }
+  //   order.status = newStatus;
+  //   return order.save();
+  // }
+
+  async findOrderById(orderId: string): Promise<Order> {
     const order = await this.orderModel.findById(orderId);
     console.log(orderId, 'orderId');
     if (!order) {
-      throw new NotFoundException('Order not found');
+      throw new NotFoundException(`Order with ID ${orderId} not found`);
     }
-    order.status = newStatus;
-    return order.save();
+    return order;
   }
 
   async cancelOrder(orderId: string): Promise<Order> {
@@ -89,5 +98,17 @@ export class OrderService {
     }
     order.status = 'cancelled';
     return order.save();
+  }
+
+
+  //Cofirm sản phẩm khi users đặt hàng
+  async confirmOrder(id:string) {
+    const order = await this.findOrderById(id);
+    console.log(order)
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+    order.status = 'confirm';
+    await order.save();
   }
 }

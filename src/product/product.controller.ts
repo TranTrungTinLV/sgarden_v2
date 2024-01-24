@@ -7,13 +7,14 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { RolesGuard } from 'src/common/guard/roles.gaurd';
-import { ProductService } from './product.service';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { RolesGuard } from 'src/common/guard/roles.gaurd';
 import { Role } from 'src/users/schema/users.schema';
-import { CreateProductDto } from './dtos/create-product.dto';
-import { Product } from './schema/product.schema';
 import { UsersService } from 'src/users/users.service';
+
+import { CreateProductDto } from './dtos/create-product.dto';
+import { ProductService } from './product.service';
+import { Product } from './schema/product.schema';
 
 @Controller('product')
 @UseGuards(RolesGuard)
@@ -31,7 +32,6 @@ export class ProductController {
   ) {
     const username = request.user.username;
     console.log(username);
-    // const owner = await this.usersService.findOne(username);
     return this.productService.createProduct(createProductDto, username);
   }
 

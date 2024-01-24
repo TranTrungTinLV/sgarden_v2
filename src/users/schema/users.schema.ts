@@ -4,7 +4,7 @@ import { Order } from 'src/oder/schema/oder.schema';
 import { Product } from 'src/product/schema/product.schema';
 
 export enum Role {
-  User = 'user',
+  User = 'customer',
   Admin = 'admin',
   Staff = 'staff',
 }
