@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, Types } from 'mongoose';
+import { Category } from 'src/category/schema/category.schema';
 // import { User } from 'src/users/schema/users.schema';
 
 @Schema()
@@ -10,6 +11,7 @@ export class Product extends Document {
   //Many to One
   @Prop({ type: Types.ObjectId, ref: 'Category' })
   category_id: Types.ObjectId;
+
 
   @Prop({ type: [String], required: true })
   images?: string[];
@@ -38,6 +40,10 @@ export class Product extends Document {
 
   @Prop({ required: true })
   quantity?: number;
-}
+
+  
+};
+
+
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

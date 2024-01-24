@@ -26,17 +26,7 @@ export class CategoryController {
   }
 
   @Get(':id/products')
-  findOne(@Param('id') categoryId: string): Promise<Product[]> {
+  findOne(@Param('id') categoryId: string): Promise<Category> {
     return this.categoryService.findProductsByCategory(categoryId);
   }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-  //   return this.categoryService.update(+id, updateCategoryDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.categoryService.remove(+id);
-  // }
 }

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { Product } from 'src/product/schema/product.schema';
 // import { User } from 'src/users/schema/users.schema';
 
 @Schema({
@@ -11,7 +12,7 @@ export class Category extends Document {
 
     //Many to Many
     @Prop({type: Types.ObjectId, ref: 'Product'})
-    parent_category: Types.ObjectId[];
+    products: Product[];
 
     @Prop({type: [String], required: true})
     images?: string;

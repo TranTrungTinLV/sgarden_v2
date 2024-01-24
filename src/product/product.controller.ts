@@ -41,7 +41,7 @@ export class ProductController {
     return this.productService.findByIdProduct(id);
   }
 
-  @Roles([Role.Admin, Role.Staff])
+  @Roles([Role.Admin, Role.Staff, Role.User])
   @Get()
   async getAllProducts(): Promise<Product[]> {
     return this.productService.findAllProducts();

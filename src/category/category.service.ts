@@ -23,8 +23,8 @@ export class CategoryService {
     return newCategory.save();
   }
 
-  async findProductsByCategory(categoryId: string): Promise<Product[]> {
-    return this.productModel.find({ category_id: categoryId }).exec();
+  async findProductsByCategory(categoryId: string): Promise<Category> {
+    return this.categoryModel.findById(categoryId).populate('products').exec();
   }
   // create(createCategoryDto: CreateCategoryDto) {
   //   return 'This action adds a new category';
