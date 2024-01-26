@@ -6,7 +6,6 @@ import { Role } from 'src/users/schema/users.schema';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './schema/category.schema';
-import { Product } from 'src/product/schema/product.schema';
 
 @Controller('category')
 @UseGuards(RolesGuard)
