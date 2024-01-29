@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { OderModule } from 'src/oder/oder.module';
 import { OderSchema } from 'src/oder/schema/oder.schema';
+import { UsersModule } from 'src/users/users.module';
 
 import { DiscountcodeController } from './discountcode.controller';
 import { DiscountcodeService } from './discountcode.service';
@@ -19,8 +19,9 @@ import { DiscountcodeSchema } from './schema/discountcode.schema';
     name: 'Order',
     schema: OderSchema
   },
-  
-])
+]),
+UsersModule
+
 ],
 controllers: [DiscountcodeController],
   providers: [DiscountcodeService],

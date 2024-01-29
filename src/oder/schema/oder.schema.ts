@@ -19,7 +19,7 @@ export enum Type {
 })
 export class Order extends Document {
   @Prop({ type: Types.ObjectId, ref: 'User' })
-  customer_id: User;
+  customer_id: Types.ObjectId[];
 
   @Prop([{ type: Types.ObjectId, ref: 'Product' }])
   products: Types.ObjectId[];

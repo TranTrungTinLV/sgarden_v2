@@ -16,8 +16,4 @@ export class CreateDiscountcodeDto {
     @IsNumber()
     @IsOptional()
     discount: number;
-
-//     @IsString()
-//   @IsOptional()
-//   discountCode?: string;
 }

@@ -24,7 +24,7 @@ export class DiscountcodeService {
     }
     const now = new Date();
     if(discountCode.isUsed || discountCode.valid_to < now) {
-      throw new NotFoundException(`Discount code ${code} không đúng`)
+      throw new NotFoundException(`Mã ${code} hết hạn`)
     }
     return discountCode
   }

@@ -28,6 +28,7 @@ export class oderDto {
   @IsNumber()
   readonly total_pay: number;
 
+
   @IsNotEmpty()
   @IsArray()
   @IsMongoId({ each: true })

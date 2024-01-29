@@ -27,6 +27,7 @@ export class OrderService {
   ) {}
 
   async createOrder(user: User, createOrderDto: oderDto): Promise<Order> {
+    const custormer = await this.userService.findOne(user.username)
     if (!createOrderDto || !createOrderDto.products) {
       throw new NotFoundException('Order data is missing');
     }
@@ -34,6 +35,8 @@ export class OrderService {
 
     // Validate products and check stock
     let total = 0;
+    // let discountCodeDocument: DiscountCode | null = null;
+
     for (const productId of products) {
       const productItem = await this.productModel.findById(productId);
       if (!productItem) {
@@ -62,11 +65,10 @@ export class OrderService {
     console.log("Áp dụng giảm giá",discountedTotal)
     // Create order
     const order = new this.orderModel({
-      customer: user._id,
+      customer_id: custormer._id,
       products: products,
       total_price: discountedTotal,
       status: OrderStatus.PENDING,
-      discountCode: DiscountCode,
     });
 
     const qrData = {total_price: total, custormer: user.username}
