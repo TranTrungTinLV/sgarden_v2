@@ -29,7 +29,7 @@ export class AuthController {
     @Param('userId') userId: string,
     @Body('score') points: number
   ) {
-    return this.userService.updateMemberPoints(userId,points)
+    // return this.userService.updateMemberPoints(userId,points)
   }
 
   @Public()

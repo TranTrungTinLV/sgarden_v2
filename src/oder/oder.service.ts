@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
+import { DiscountcodeService } from 'src/discountcode/discountcode.service';
+import { DiscountCode } from 'src/discountcode/schema/discountcode.schema';
 import { Product } from 'src/product/schema/product.schema';
 import { UsersService } from 'src/users/users.service';
 import { generateQRCode } from 'src/utils/generate_qRcode.ultils';
@@ -18,7 +20,10 @@ export class OrderService {
     @InjectModel(User.name) private readonly userModel: mongoose.Model<User>,
     @InjectModel(Product.name)
     private readonly productModel: mongoose.Model<Product>,
-    private readonly userService: UsersService
+    @InjectModel(DiscountCode.name)
+    private readonly disCountModel: mongoose.Model<DiscountCode>,
+    private readonly userService: UsersService,
+    private disCountCodeService: DiscountcodeService,
   ) {}
 
   async createOrder(user: User, createOrderDto: oderDto): Promise<Order> {
@@ -42,12 +47,26 @@ export class OrderService {
       await productItem.save();
     }
 
+    //Xác thực mã giảm giá nếu có
+    let discountPercent = 0;
+    if(createOrderDto.discountCode){
+      const discountCode = await this.disCountCodeService.validateDiscountCode(createOrderDto.discountCode);
+      console.log(discountCode,"%")
+      if(discountCode){
+        console.log("tồn tại mã")
+        discountPercent = discountCode.discount
+      }
+    }
+
+    const discountedTotal = total * (1 - discountPercent / 100);
+    console.log("Áp dụng giảm giá",discountedTotal)
     // Create order
     const order = new this.orderModel({
       customer: user._id,
       products: products,
-      total_price: total,
+      total_price: discountedTotal,
       status: OrderStatus.PENDING,
+      discountCode: DiscountCode,
     });
 
     const qrData = {total_price: total, custormer: user.username}
@@ -58,7 +77,14 @@ export class OrderService {
 
     console.log(user?.username)
     await this.updateUserOrderScore(user?.username)
-    return order.save();
+
+    //Lưu đơn hàng cái
+    const savedOrder = await order.save();
+    //Cập nhật là mã trạng thái đã sử dụng
+    if(createOrderDto.discountCode) {
+      await this.disCountModel.updateOne({code: createOrderDto.discountCode},{isUsed: true}).exec();
+    }
+    return savedOrder;
   }
 
   async findAll(): Promise<Order[]> {
@@ -120,7 +146,7 @@ export class OrderService {
     user.score = (user.score || 0) + 1;
     if(user.score >= 5) {
       //Tích điểm và reset số lần đặt hàng
-      await this.userService.updateMemberPoints(userSlug,1);
+      // await this.userService.updateMemberPoints(userSlug,1);
       user.score = 0;
       console.log("tăng điểm")
     }

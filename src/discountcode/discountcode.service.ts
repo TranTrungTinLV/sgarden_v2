@@ -1,26 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
 import { CreateDiscountcodeDto } from './dto/create-discountcode.dto';
-import { UpdateDiscountcodeDto } from './dto/update-discountcode.dto';
+import { DiscountCode } from './schema/discountcode.schema';
 
 @Injectable()
 export class DiscountcodeService {
-  create(createDiscountcodeDto: CreateDiscountcodeDto) {
-    return 'This action adds a new discountcode';
+  constructor(
+    @InjectModel(DiscountCode.name) private readonly disCountModel: Model<DiscountCode>
+  ){}
+
+  async create(createDiscountDto: CreateDiscountcodeDto): Promise<DiscountCode> {
+    const newDiscountCode = new this.disCountModel(createDiscountDto);
+    return newDiscountCode.save();
   }
 
-  findAll() {
-    return `This action returns all discountcode`;
+  async validateDiscountCode(code: string): Promise<DiscountCode> {
+    const discountCode = await this.disCountModel.findOne({code:code}).exec();
+    console.log("mã giảm giá",discountCode)
+    if(!discountCode) {
+      throw new NotFoundException(`Discount code ${code} không tồn tại`)
+    }
+    const now = new Date();
+    if(discountCode.isUsed || discountCode.valid_to < now) {
+      throw new NotFoundException(`Discount code ${code} không đúng`)
+    }
+    return discountCode
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} discountcode`;
-  }
-
-  update(id: number, updateDiscountcodeDto: UpdateDiscountcodeDto) {
-    return `This action updates a #${id} discountcode`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} discountcode`;
-  }
+  
 }

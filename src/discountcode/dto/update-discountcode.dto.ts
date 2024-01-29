@@ -1,4 +1,19 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateDiscountcodeDto } from './create-discountcode.dto';
+import { IsBoolean, IsDate, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class UpdateDiscountcodeDto extends PartialType(CreateDiscountcodeDto) {}
+export class UpdateDiscountcodeDto {
+    @IsString()
+    @IsNotEmpty()
+    code?: string;
+
+    @IsDate()
+    @IsOptional()
+    valid_to?: Date;
+
+    @IsBoolean()
+    @IsOptional()
+    isUsed?: boolean;
+
+    @IsNumber()
+    @IsOptional()
+    discount?: number;
+}

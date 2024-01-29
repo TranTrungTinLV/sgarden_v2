@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { DiscountCode } from 'src/discountcode/schema/discountcode.schema';
 
 import { User } from '../../users/schema/users.schema';
 
@@ -55,6 +56,9 @@ export class Order extends Document {
   //cancel
   @Prop()
   status: string;
+
+  @Prop({type: Types.ObjectId, ref: 'DiscountCode'})
+  discountCode: DiscountCode | Types.ObjectId;
 }
 
 export const OderSchema = SchemaFactory.createForClass(Order);

@@ -23,7 +23,7 @@ export class oderDto {
 
   // @IsNotEmpty()
   @IsNumber()
-  readonly total_price: number;
+   total_price: number;
 
   @IsNumber()
   readonly total_pay: number;
@@ -35,4 +35,8 @@ export class oderDto {
 
   @IsNumber()
   readonly quantity?: number;
+
+  @IsString()
+  @IsOptional()
+  readonly discountCode: string;
 }

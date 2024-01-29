@@ -11,7 +11,6 @@ import { RegistorModule } from './registor/registor.module';
 import { UsersModule } from './users/users.module';
 import { CategoryModule } from './category/category.module';
 import { DiscountcodeModule } from './discountcode/discountcode.module';
-import { DiscountcodeModule } from './discountcode/discountcode.module';
 
 @Module({
   imports: [
