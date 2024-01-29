@@ -2,7 +2,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { DiscountCode } from 'src/discountcode/schema/discountcode.schema';
 
-import { User } from '../../users/schema/users.schema';
 
 export enum OrderStatus {
   PENDING = 'pending',
@@ -58,7 +57,7 @@ export class Order extends Document {
   status: string;
 
   @Prop({type: Types.ObjectId, ref: 'DiscountCode'})
-  discountCode: DiscountCode | Types.ObjectId;
+  discountCode: DiscountCode | Types.ObjectId; //đây là discount
 }
 
 export const OderSchema = SchemaFactory.createForClass(Order);

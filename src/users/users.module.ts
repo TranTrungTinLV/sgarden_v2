@@ -4,15 +4,15 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
+import { LevelMemberModule } from 'src/level-member/level-member.module';
 import { UserSchema } from 'src/users/schema/users.schema';
-// import { JwtStrategy } from './jwt.strategy';
 import { UsersService } from 'src/users/users.service';
 
 import { RolesGuard } from '../common/guard/roles.gaurd';
-// import { UsersController } from './users.controller';
 
 @Module({
   imports: [
+    LevelMemberModule,
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
@@ -25,7 +25,8 @@ import { RolesGuard } from '../common/guard/roles.gaurd';
         };
       },
     }),
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]), //đkm mày User đéo phải user
+    MongooseModule.forFeature([
+      { name: 'User', schema: UserSchema }]), //đkm mày User đéo phải user
   ],
   providers: [
     UsersService,

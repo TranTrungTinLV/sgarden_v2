@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { DiscountcodeService } from 'src/discountcode/discountcode.service';
 import { DiscountCode } from 'src/discountcode/schema/discountcode.schema';
+import { LevelMemberService } from 'src/level-member/level-member.service';
 import { Product } from 'src/product/schema/product.schema';
 import { UsersService } from 'src/users/users.service';
 import { generateQRCode } from 'src/utils/generate_qRcode.ultils';
@@ -24,6 +25,7 @@ export class OrderService {
     private readonly disCountModel: mongoose.Model<DiscountCode>,
     private readonly userService: UsersService,
     private disCountCodeService: DiscountcodeService,
+    private readonly levelService: LevelMemberService,
   ) {}
 
   async createOrder(user: User, createOrderDto: oderDto): Promise<Order> {
@@ -78,14 +80,20 @@ export class OrderService {
     order.QRCode = qrCode;
 
     console.log(user?.username)
-    await this.updateUserOrderScore(user?.username)
+    
 
     //Lưu đơn hàng cái
     const savedOrder = await order.save();
+
+    await this.updateScoreAndLevel(user?.username,savedOrder.total_price)
+
     //Cập nhật là mã trạng thái đã sử dụng
     if(createOrderDto.discountCode) {
       await this.disCountModel.updateOne({code: createOrderDto.discountCode},{isUsed: true}).exec();
     }
+
+    //Cập nhật điểm và cấp độ thành viên
+    // await this.userService.updateScoreAndLevel(user._id)
     return savedOrder;
   }
 
@@ -135,23 +143,39 @@ export class OrderService {
   }
 
   //update điểm score
-  private async updateUserOrderScore(userSlug: string) {
-    const user = await this.userModel.findOne({
-      username:userSlug
-    });
-    console.log(user)
-    if(!user) {
-      throw new NotFoundException(`User with ID ${userSlug} không tôn tại nên không thể cập nhật điểm`);
-    }
+  // private async updateUserOrderScore(userSlug: string, orderTotal: number) {
+  //   const user = await this.userModel.findOne({ username: userSlug });
+  //   console.log(user)
+  //   if(!user) {
+  //     throw new NotFoundException(`User with ID ${userSlug} không tôn tại nên không thể cập nhật điểm`);
+  //   }
 
-    //Tăng số lần đặt hàng và kiểm tra điều kiện tích điểm
-    user.score = (user.score || 0) + 1;
-    if(user.score >= 5) {
-      //Tích điểm và reset số lần đặt hàng
-      // await this.userService.updateMemberPoints(userSlug,1);
-      user.score = 0;
-      console.log("tăng điểm")
+  //    // Giả sử mỗi 1000 đơn vị tiền tệ sẽ tích lũy 1 điểm
+  // const pointsToAdd = Math.floor(orderTotal / 1000);
+  // user.score += pointsToAdd;
+
+  // // Kiểm tra và cập nhật cấp độ thành viên
+  // const newLevel = await this.levelService.determineMemberLevel(user.score);
+  // user.level_member = newLevel;
+
+  // await user.save();
+  // }
+
+    //cập nhật điểm thành viên
+    private async updateScoreAndLevel(username: string, orderTotal: number){
+      const user = await this.userModel.findOne({username:username});
+      console.log(user);
+      if(!user){
+        throw new NotFoundException("không tìm thấy User để cập nhật điểm");
+      }
+      //Cập nhật điểm
+      const pointsToAdd = Math.floor(orderTotal / 1000);
+  
+      user.score += pointsToAdd;
+  
+      //Xác định thành viên gì?
+      const newLevel = await this.levelService.determineMemberLevel(user.score);
+      user.level_member = newLevel
+      await user.save();
     }
-    await user.save();
-  }
 }

@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
+import { LevelMemberService } from 'src/level-member/level-member.service';
 
 import { User } from './schema/users.schema';
 
@@ -9,6 +10,7 @@ export class UsersService {
   constructor(
     @InjectModel(User.name)
     private readonly UserModel: mongoose.Model<User>,
+    private readonly levelMemberService: LevelMemberService
   ) {
     console.log('UserService contructor');
   }
@@ -24,16 +26,5 @@ export class UsersService {
     return user;
   }
 
-  //cập nhật điểm thành viên
-  // async updateMemberPoints(userId: string, points: number) {
-  //   console.log("Updating points for user slug:", userId);
-  //   const user = await this.UserModel.findOne({ slug: userId });
-  //   if (!user) {
-  //     throw new NotFoundException(`User with slug ${userId} không tìm thấy để cập nhật điểm`);
-  //   }
-  
-  //   user.score = (user.score || 0) + points;
-  //   await user.save();
-  //   return user;
-  // }
+
 }

@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Order } from 'src/oder/schema/oder.schema';
+import { LevelMember } from 'src/level-member/schema/levelMember.schema';
+import { Order, Type } from 'src/oder/schema/oder.schema';
 import { Product } from 'src/product/schema/product.schema';
 import { v4 } from 'uuid';
 
@@ -46,8 +47,8 @@ export class User extends Document {
     required: [true, 'Please enter numberPhone'],
   })
   phone: string;
-  @Prop()
-  level_member: string; //edit late
+  @Prop({type: Types.ObjectId, ref: 'LevelMember',required: function(){return this.role === Role.User}})
+  level_member: LevelMember | Types.ObjectId; //edit late
   @Prop({
     required: [true, 'Please enter fullName'],
   })

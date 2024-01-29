@@ -11,6 +11,7 @@ import { RegistorModule } from './registor/registor.module';
 import { UsersModule } from './users/users.module';
 import { CategoryModule } from './category/category.module';
 import { DiscountcodeModule } from './discountcode/discountcode.module';
+import { LevelMemberModule } from './level-member/level-member.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { DiscountcodeModule } from './discountcode/discountcode.module';
     RegistorModule,
     CategoryModule,
     DiscountcodeModule,
+    LevelMemberModule,
   ],
 })
 export class AppModule {}

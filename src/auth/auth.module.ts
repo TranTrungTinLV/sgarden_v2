@@ -6,9 +6,11 @@ import { UsersModule } from 'src/users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '../common/guard/auth.gaurd';
 import { ConfigService } from '@nestjs/config';
+import { LevelMemberModule } from 'src/level-member/level-member.module';
 
 @Module({
   imports: [
+    // LevelMemberModule,
     UsersModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
