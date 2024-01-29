@@ -11,6 +11,8 @@ import {
 import { Role } from 'src/users/schema/users.schema';
 
 export class CreateRegistorDto {
+  @IsString()
+  readonly slug:string
   @IsNotEmpty()
   @IsString()
   readonly username: string;

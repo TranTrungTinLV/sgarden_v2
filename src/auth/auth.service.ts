@@ -9,36 +9,6 @@ export class AuthService {
     private readonly usersService: UsersService,
     private jwtService: JwtService,
   ) {}
-  // async signUp(signupDto: SignupDto): Promise<{ token: string; user: User }> {
-  //   const {
-  //     username,
-  //     password,
-  //     email,
-  //     fullname,
-  //     sex,
-  //     birthday,
-  //     phone,
-  //     level_member,
-  //     avatar,
-  //   } = signupDto;
-  //   const hashedPassword = await bcrypt.hash(password, 10);
-
-  //   const user = await this.userModel.create({
-  //     username,
-  //     password: hashedPassword,
-  //     email,
-  //     fullname,
-  //     sex,
-  //     birthday,
-  //     phone,
-  //     avatar,
-  //     level_member,
-  //   });
-  //   const token = this.jwtService.sign({
-  //     id: user._id,
-  //   });
-  //   return { token, user };
-  // }
 
   async login(username: string, pwd: string) { //đăng nhập
     // const { email, password } = loginDto;
@@ -56,8 +26,10 @@ export class AuthService {
     }
     // The "sub" (subject) claim identifies the principal that is the subject of the JWT
     const payload = { username: username, sub: user._id };
+    const accessToken = this.jwtService.sign(payload,{expiresIn: '5m'}) // sau 5 phút đăng nhập lại
+    const refreshToken = this.jwtService.sign(payload,{expiresIn: '7d'})
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await accessToken,
     };
   }
 }

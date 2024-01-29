@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Product } from 'src/product/schema/product.schema';
+import { UsersService } from 'src/users/users.service';
 import { generateQRCode } from 'src/utils/generate_qRcode.ultils';
 
 // import { UpdateOrderDto, oderDto } from './dto/oder-dto';
@@ -17,6 +18,7 @@ export class OrderService {
     @InjectModel(User.name) private readonly userModel: mongoose.Model<User>,
     @InjectModel(Product.name)
     private readonly productModel: mongoose.Model<Product>,
+    private readonly userService: UsersService
   ) {}
 
   async createOrder(user: User, createOrderDto: oderDto): Promise<Order> {
@@ -32,9 +34,9 @@ export class OrderService {
       if (!productItem) {
         throw new NotFoundException(`Product ${productId} not found`);
       }
-      if (productItem.quantityInStock >= productItem.quantity) {
-        throw new NotFoundException(`Product ${productId} is out of stock`);
-      }
+      // if (productItem.quantityInStock < 1) {
+      //   throw new NotFoundException(`Product ${productId} is out of stock`);
+      // }
       total += productItem.price_new;
       productItem.quantityInStock -= 1; // Giảm số lượng tồn kho
       await productItem.save();
@@ -53,17 +55,9 @@ export class OrderService {
     const qrCode = await generateQRCode(JSON.stringify(qrData));
 
     order.QRCode = qrCode;
-    // // Kiểm tra số lượng tồn kho
-    // for (const productId of createOrderDto.products) {
-    //   const products = await this.productModel.findById(productId);
-    //   if (!product || products.quantityInStock <= createOrderDto.quantity) {
-    //     throw new NotFoundException(`Product ${productId} is out of stock`);
-    //   }
-    //   // Giảm số lượng tồn kho
-    //   products.quantityInStock -= 1;
-    //   await product;
-    // }
 
+    console.log(user?.username)
+    await this.updateUserOrderScore(user?.username)
     return order.save();
   }
 
@@ -72,15 +66,15 @@ export class OrderService {
     return order;
   }
 
-  // async updateOrderStatus(orderId: string, newStatus: string): Promise<Order> {
-  //   const order = await this.orderModel.findById(orderId);
-  //   console.log(orderId, 'orderId');
-  //   if (!order) {
-  //     throw new NotFoundException('Order not found');
-  //   }
-  //   order.status = newStatus;
-  //   return order.save();
-  // }
+  async updateOrderStatus(orderId: string, newStatus: string): Promise<Order> {
+    const order = await this.orderModel.findById(orderId);
+    console.log(orderId, 'orderId');
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+    order.status = newStatus;
+    return order.save();
+  }
 
   async findOrderById(orderId: string): Promise<Order> {
     const order = await this.orderModel.findById(orderId);
@@ -110,5 +104,26 @@ export class OrderService {
     }
     order.status = 'confirm';
     await order.save();
+  }
+
+  //update điểm score
+  private async updateUserOrderScore(userSlug: string) {
+    const user = await this.userModel.findOne({
+      username:userSlug
+    });
+    console.log(user)
+    if(!user) {
+      throw new NotFoundException(`User with ID ${userSlug} không tôn tại nên không thể cập nhật điểm`);
+    }
+
+    //Tăng số lần đặt hàng và kiểm tra điều kiện tích điểm
+    user.score = (user.score || 0) + 1;
+    if(user.score >= 5) {
+      //Tích điểm và reset số lần đặt hàng
+      await this.userService.updateMemberPoints(userSlug,1);
+      user.score = 0;
+      console.log("tăng điểm")
+    }
+    await user.save();
   }
 }

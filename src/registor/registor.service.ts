@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 
 import { User } from '../users/schema/users.schema';
 import { CreateRegistorDto } from './dto/create-registor.dto';
+import { v4 } from 'uuid';
 
 @Injectable()
 export class RegistorService {
@@ -30,6 +31,7 @@ export class RegistorService {
       avatar,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       role,
+      slug
     } = signUpDto;
 
     // Check if the username or email is already taken
@@ -56,6 +58,7 @@ export class RegistorService {
       fullname,
       avatar,
       role,
+      slug
     });
     await user.save();
 

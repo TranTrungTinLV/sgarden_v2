@@ -10,6 +10,8 @@ import { ProductModule } from './product/product.module';
 import { RegistorModule } from './registor/registor.module';
 import { UsersModule } from './users/users.module';
 import { CategoryModule } from './category/category.module';
+import { DiscountcodeModule } from './discountcode/discountcode.module';
+import { DiscountcodeModule } from './discountcode/discountcode.module';
 
 @Module({
   imports: [
@@ -31,6 +33,7 @@ import { CategoryModule } from './category/category.module';
     UsersModule,
     RegistorModule,
     CategoryModule,
+    DiscountcodeModule,
   ],
 })
 export class AppModule {}

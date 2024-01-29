@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Order } from 'src/oder/schema/oder.schema';
 import { Product } from 'src/product/schema/product.schema';
+import { v4 } from 'uuid';
 
 export enum Role {
   User = 'customer',
@@ -16,7 +17,15 @@ export class User extends Document {
   @Prop({
     required: [true, 'Please enter userName'],
   })
+  
   username: string;
+
+  @Prop(
+    {
+      default: () => v4().split('-')[0]
+    }
+  )
+  slug: string;
   @Prop({
     required: [true, 'Please enter password'],
   })
@@ -43,12 +52,11 @@ export class User extends Document {
     required: [true, 'Please enter fullName'],
   })
   fullname: string;
-  @Prop()
-  score: string; //edit late
+
   @Prop({
     type: String,
     enum: Role,
-    default: Role.Admin,
+    default: Role.User,
   })
   role: Role;
 
@@ -66,6 +74,12 @@ export class User extends Document {
   //One to Many Order
   @Prop({ type: Types.ObjectId, ref: 'Order' })
   orders: Order[];
+
+  @Prop({type: [{type: String}]})
+  feedbacks: string[];
+
+  @Prop({default: 0})
+  score: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

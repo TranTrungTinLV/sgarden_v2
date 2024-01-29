@@ -37,15 +37,17 @@ export class OderController {
     return this.orderService.findAll();
   }
 
-  // @Patch(':orderId/status')
-  // @Roles([Role.Admin, Role.User, Role.Staff]) // Hoặc các role phù hợp
-  // async updateOrderStatus(
-  //   @Param('orderId') orderId: string,
-  //   @Body('status') status: string,
-  // ) {
-  //   return this.orderService.updateOrderStatus(orderId, status);
-  // }
+  //Cập nhật trạng thái
+  @Patch(':orderId/status')
+  @Roles([Role.Admin, Role.User, Role.Staff]) // Hoặc các role phù hợp
+  async updateOrderStatus(
+    @Param('orderId') orderId: string,
+    @Body('status') status: string,
+  ) {
+    return this.orderService.updateOrderStatus(orderId, status);
+  }
 
+  //hùy đơn hàng
   @Patch(':orderId/cancel')
   @Roles([Role.User, Role.Staff]) // Hoặc các role phù hợp
   async cancelOrder(@Param('orderId') orderId: string) {
@@ -53,7 +55,7 @@ export class OderController {
   }
 
   //xác nhận đơn hàng nè
-  @Patch('confirm/:orderId')
+  @Patch(':orderId/confirm')
   @Roles([Role.Staff])
   confirmOrder(@Param('orderId') orderId: string) {
     return this.orderService.confirmOrder(orderId);
