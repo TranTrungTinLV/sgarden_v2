@@ -17,7 +17,7 @@ export class LevelMember extends Document {
         enum: MemberLevel,
         default: MemberLevel.BASIC,
     })
-    level_member: MemberLevel;
+    level_name: MemberLevel;
 
     @Prop({
         required: true,

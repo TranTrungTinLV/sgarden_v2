@@ -22,7 +22,7 @@ export class LevelMemberService {
 
     //Tìm cấp độ thành viên
     const levelMember = await this.levelMemberModel.findOne({
-        level_member: levelName
+        level_name: levelName
     }).exec();
     if(!levelMember){
         throw new NotFoundException(`Level member not found for level: ${levelName}`);
