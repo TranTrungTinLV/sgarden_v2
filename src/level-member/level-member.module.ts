@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { LevelMemberController } from './level-member.controller';
 import { LevelMemberService } from './level-member.service';
 import { LevelMemberSchema } from './schema/levelMember.schema';
+import { UserSchema } from 'src/users/schema/users.schema';
 
 @Module({
   imports: [
@@ -12,7 +13,10 @@ import { LevelMemberSchema } from './schema/levelMember.schema';
         name: 'LevelMember',
         schema: LevelMemberSchema
       },
-     
+      {
+        name: 'User',
+        schema: UserSchema
+      }
     ]),
     // UsersModule
   ],

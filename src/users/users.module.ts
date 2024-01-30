@@ -9,6 +9,7 @@ import { UserSchema } from 'src/users/schema/users.schema';
 import { UsersService } from 'src/users/users.service';
 
 import { RolesGuard } from '../common/guard/roles.gaurd';
+import { LevelMemberSchema } from 'src/level-member/schema/levelMember.schema';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { RolesGuard } from '../common/guard/roles.gaurd';
       },
     }),
     MongooseModule.forFeature([
-      { name: 'User', schema: UserSchema }]), //đkm mày User đéo phải user
+      { name: 'User', schema: UserSchema },
+    {name: 'LevelMember', schema: LevelMemberSchema}]), //đkm mày User đéo phải user
   ],
   providers: [
     UsersService,

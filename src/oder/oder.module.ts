@@ -26,7 +26,7 @@ import { OderSchema } from './schema/oder.schema';
       { name: 'User', schema: UserSchema },
       { name: 'Product', schema: ProductSchema },
       {name: 'DiscountCode', schema: DiscountcodeSchema},
-      {name: 'LevelMember',schema:LevelMemberSchema}
+      {name: 'LevelMember',schema: LevelMemberSchema}
     ]),
   ],
   controllers: [OderController],

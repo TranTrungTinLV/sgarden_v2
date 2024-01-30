@@ -47,8 +47,9 @@ export class User extends Document {
     required: [true, 'Please enter numberPhone'],
   })
   phone: string;
-  @Prop({type: Types.ObjectId, ref: 'LevelMember',required: function(){return this.role === Role.User}})
-  level_member: LevelMember | Types.ObjectId; //edit late
+  @Prop({ type: Types.ObjectId, ref: 'LevelMember' })
+  level_member: LevelMember | Types.ObjectId[];
+
   @Prop({
     required: [true, 'Please enter fullName'],
   })

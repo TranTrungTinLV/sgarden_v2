@@ -81,11 +81,12 @@ export class OrderService {
 
     console.log(user?.username)
     
+    await this.userService.updateMemberLevel(user?.username);
 
     //Lưu đơn hàng cái
     const savedOrder = await order.save();
 
-    await this.updateScoreAndLevel(user?.username,savedOrder.total_price)
+    // await this.updateUserOrderScore(user._id)
 
     //Cập nhật là mã trạng thái đã sử dụng
     if(createOrderDto.discountCode) {
@@ -142,40 +143,32 @@ export class OrderService {
     await order.save();
   }
 
-  //update điểm score
-  // private async updateUserOrderScore(userSlug: string, orderTotal: number) {
-  //   const user = await this.userModel.findOne({ username: userSlug });
+  // private async updateUserOrderScore(userSlug: string) {
+  //   const user = await this.userModel.findOne({
+  //     username: userSlug
+  //   });
   //   console.log(user)
   //   if(!user) {
   //     throw new NotFoundException(`User with ID ${userSlug} không tôn tại nên không thể cập nhật điểm`);
   //   }
 
-  //    // Giả sử mỗi 1000 đơn vị tiền tệ sẽ tích lũy 1 điểm
-  // const pointsToAdd = Math.floor(orderTotal / 1000);
-  // user.score += pointsToAdd;
-
-  // // Kiểm tra và cập nhật cấp độ thành viên
-  // const newLevel = await this.levelService.determineMemberLevel(user.score);
-  // user.level_member = newLevel;
-
-  // await user.save();
+  //   //Tăng số lần đặt hàng và kiểm tra điều kiện tích điểm
+  //   user.score = (user.score || 0) + 1;
+  //   const newLevel = await this.levelService.determineMemberLevel(user.score);
+  //   console.log(newLevel)
+  //   user.level_member = newLevel._id
+  //   // console.log(score)
+  //   // const newLevel = await this.levelService.determineMemberLevel(score)
+  //   // user.level_member = newLevel._id
+  //   // if(user.score >= 5) {
+  //   //   //Tích điểm và reset số lần đặt hàng
+  //   //   // await this.userService.updateMemberPoints(userSlug,1);
+  //   //   user.score = 0;
+  //   //   console.log("tăng điểm")
+  //   // }
+  //   await user.save();
   // }
+  }
 
-    //cập nhật điểm thành viên
-    private async updateScoreAndLevel(username: string, orderTotal: number){
-      const user = await this.userModel.findOne({username:username});
-      console.log(user);
-      if(!user){
-        throw new NotFoundException("không tìm thấy User để cập nhật điểm");
-      }
-      //Cập nhật điểm
-      const pointsToAdd = Math.floor(orderTotal / 1000);
-  
-      user.score += pointsToAdd;
-  
-      //Xác định thành viên gì?
-      const newLevel = await this.levelService.determineMemberLevel(user.score);
-      user.level_member = newLevel
-      await user.save();
-    }
-}
+
+
