@@ -81,10 +81,10 @@ export class OrderService {
 
     console.log(user?.username)
     
-    await this.userService.updateMemberLevel(user?.username);
 
     //Lưu đơn hàng cái
     const savedOrder = await order.save();
+    await this.userService.updateScoreAndLevel(user.username,1); // Tăng điểm lên 1 sau mỗi đơn hàng
 
     // await this.updateUserOrderScore(user._id)
 

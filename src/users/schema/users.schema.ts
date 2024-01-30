@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
-import { LevelMember } from 'src/level-member/schema/levelMember.schema';
+import mongoose, { Document, Types } from 'mongoose';
+import { LevelMember, MemberLevel } from 'src/level-member/schema/levelMember.schema';
 import { Order, Type } from 'src/oder/schema/oder.schema';
 import { Product } from 'src/product/schema/product.schema';
 import { v4 } from 'uuid';
@@ -48,7 +48,8 @@ export class User extends Document {
   })
   phone: string;
   @Prop({ type: Types.ObjectId, ref: 'LevelMember' })
-  level_member: LevelMember | Types.ObjectId[];
+  
+  level_member: MemberLevel;
 
   @Prop({
     required: [true, 'Please enter fullName'],

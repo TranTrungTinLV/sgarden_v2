@@ -41,7 +41,6 @@ export class CreateRegistorDto {
   @IsString()
   readonly phone: string;
 
-  @IsNotEmpty()
   @IsString()
   readonly level_member: string;
 

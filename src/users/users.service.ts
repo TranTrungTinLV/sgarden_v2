@@ -26,23 +26,20 @@ export class UsersService {
     return user;
   }
 
-  async updateMemberLevel(username: string) {
-    const user = await this.UserModel.findOne({ username });
-    console.log(user)
+  async updateScoreAndLevel(username: string, points: number){
+    const user = await this.UserModel.findOne({username});
     if (!user) {
-      throw new NotFoundException(`User not found with username: ${username}`);
+      throw new NotFoundException(`User not found with ID: ${user}`);
     }
 
-    // Sử dụng LevelMemberService để xác định cấp độ mới
+    user.score += points;
+    await user.save();
+    
+    const newLevel = (await this.levelMemberService.determineMemberLevel(user.score));
 
-   user.score = (user.score || 0) + 1;
-   console.log(user.score);
-   await user.save();
-    const newLevel = await this.levelMemberService.determineMemberLevel(user.score);
-   
-    user.level_member = newLevel._id
-    console.log(user.level_member)
-    return user;
+    user.level_member = newLevel.level_name; // Gán ObjectId của LevelMember
+    await user.save();
+    // return user;
   }
 
 }

@@ -13,12 +13,14 @@ export class LevelMemberService {
  async determineMemberLevel(score: number): Promise<LevelMember> {
     let levelName;
 
-    if (score >= 1 && score < 5) {
+    if (score >= 0 && score < 99) {
       levelName = MemberLevel.BASIC;
-    } else if (score >= 5 && score <= 6) {
+    } else if (score >= 100 && score <= 199) {
+      levelName = MemberLevel.SILVER;
+    } else if (score >= 200 && score <= 299) {
       levelName = MemberLevel.GOLD;
-    } else {
-      levelName = MemberLevel.BASIC; // Hoặc xử lý khác
+    }else {
+      levelName = MemberLevel.PLATINUM; // Hoặc xử lý khác
     }
     console.log(`Determining level for score: ${score}, levelName: ${levelName}`);
     
