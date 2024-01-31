@@ -3,11 +3,15 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import * as crypto from 'crypto';
 import { error } from 'console';
+import { InjectModel } from '@nestjs/mongoose';
+import { User } from 'src/users/schema/users.schema';
+import mongoose from 'mongoose';
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private jwtService: JwtService,
+
   ) {}
 
   async login(username: string, pwd: string) { //đăng nhập
@@ -31,5 +35,9 @@ export class AuthService {
     return {
       access_token: await accessToken,
     };
+  }
+
+  async sendEmailForgotPassWord(email:string){
+    
   }
 }

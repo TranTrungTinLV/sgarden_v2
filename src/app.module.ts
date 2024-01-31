@@ -13,12 +13,17 @@ import { CategoryModule } from './category/category.module';
 import { DiscountcodeModule } from './discountcode/discountcode.module';
 import { LevelMemberModule } from './level-member/level-member.module';
 
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { MailerModule } from './mailer/mailer.module';
+
 @Module({
   imports: [
+
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,
     }),
+    
     MongooseModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         uri: configService.get<string>('DATABASE_URI'),
@@ -35,6 +40,7 @@ import { LevelMemberModule } from './level-member/level-member.module';
     CategoryModule,
     DiscountcodeModule,
     LevelMemberModule,
+    MailerModule
   ],
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { LevelMemberService } from 'src/level-member/level-member.service';
@@ -20,6 +20,13 @@ export class UsersService {
       'id username role',
     );
   }
+
+  // async findOneEmail(email:string): Promise<boolean> {
+  //   let userDb = await this.UserModel.findOne({email: email});
+  //   if(!userDb) {
+  //     throw new HttpException("Login not found email",HttpStatus.NOT_FOUND);
+  //   }
+  // }
 
   async findOneWithPassword(username: string) {
     const user = await this.UserModel.findOne({ username });

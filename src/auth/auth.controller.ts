@@ -38,4 +38,6 @@ export class AuthController {
   async logout(@Req() request: any) {
     return { message: 'Logout successful' };
   }
+
+  
 }
