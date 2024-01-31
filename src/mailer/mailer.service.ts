@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 
 import { ConfigService } from '@nestjs/config';
+import { InjectModel } from '@nestjs/mongoose';
 
 import * as nodemailer from 'nodemailer'
+import { MailMsg } from './schema/mailer.schema';
+import { Model } from 'mongoose';
 @Injectable()
 export class MailerService {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    ) {}
   async sendEmail(to: string, subject: string, message: string): Promise<void> {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
