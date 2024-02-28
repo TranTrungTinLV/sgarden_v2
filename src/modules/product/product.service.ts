@@ -67,7 +67,7 @@ export class ProductService {
   }
 
   async findAllProducts(): Promise<Product[]> {
-    return this.productModel.find().populate('owner','username').populate('image');
+    return this.productModel.find().populate('owner','username').populate('images');
   }
 
   async findByIdProduct(productId: string): Promise<Product> {
