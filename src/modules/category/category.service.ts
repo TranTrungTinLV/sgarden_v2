@@ -21,7 +21,7 @@ export class CategoryService {
         name: { $regex: keyword, $options: 'i' },
       }).populate('products', 'name price_original price_new').exec();
     } else {
-      return this.categoryModel.find().populate('products', 'name price_original price_new').exec();
+      return this.categoryModel.find().populate('products', 'name price_original price_new image').exec();
     }
     // console.log(this.categoryModel.find().populate('products','name price_original'))
     // return this.categoryModel.find().populate('products','name price_original price_new').exec();
