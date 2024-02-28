@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpCode, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Product } from 'src/modules/product/schema/product.schema';
@@ -15,9 +15,16 @@ export class CategoryService {
 
   ) {}
 
-  async findAll(): Promise<Category[]> {
-    console.log(this.categoryModel.find().populate('products','name price_original'))
-    return this.categoryModel.find().populate('products','name price_original price_new').exec();
+  async findAll(keyword?:string): Promise<Category[]> {
+    if (keyword) {
+      return this.categoryModel.find({
+        name: { $regex: keyword, $options: 'i' },
+      }).populate('products', 'name price_original price_new').exec();
+    } else {
+      return this.categoryModel.find().populate('products', 'name price_original price_new').exec();
+    }
+    // console.log(this.categoryModel.find().populate('products','name price_original'))
+    // return this.categoryModel.find().populate('products','name price_original price_new').exec();
   }
 
   async findCategoryWithSearch(keyword: string) {
@@ -31,6 +38,7 @@ export class CategoryService {
       }
     }).populate('products','name price_original price_new').exec();
   }
+
   async create(category: CreateCategoryDto): Promise<Category> {
     const newCategory = await this.categoryModel.create(category);
     return newCategory;
@@ -40,6 +48,17 @@ export class CategoryService {
     const category = (await this.categoryModel.findById(categoryId));
     console.log(category);
     return category.populate('products','name');
+  }
+
+  //Xóa Danh mục
+  
+  async deleteCategory(id:string) {
+    const result = await this.categoryModel.deleteOne({_id: id})
+    if(result.deletedCount === 0) {
+      throw new NotFoundException(`Không tìm thấy ${id} để xóa danh mục`)
+    }else{
+      return result;
+    }
   }
   // create(createCategoryDto: CreateCategoryDto) {
   //   return 'This action adds a new category';

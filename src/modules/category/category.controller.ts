@@ -1,4 +1,4 @@
-import { Body, Controller, Delete,Get, Param, Patch, Post, Query, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete,Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Roles } from 'src/common/decators/roles.decorator';
 import { RolesGuard } from 'src/common/guard/roles.gaurd';
 import { Role } from 'src/modules/users/schema/users.schema';
@@ -6,12 +6,13 @@ import { Role } from 'src/modules/users/schema/users.schema';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './schema/category.schema';
-import { ApiBearerAuth, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/utils/uploadImage';
 import { Response } from 'express';
 import { join } from 'path';
 import { Public } from 'src/common/decorators/public.decorations';
+import { SearchCategoryFilter } from './dto/get-category-filter-dto';
 
 @ApiSecurity('bearerAuth')
 @ApiTags('Category')
@@ -22,6 +23,9 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: HttpStatus.OK, description: 'Đăng danh mục thành công' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Đăng danh mục thất bại' })
   @UseInterceptors(FileInterceptor('image',multerOptions('categoryImage')))
   @Roles([Role.Staff,Role.Admin])
   @ApiOperation({ summary: 'Tạo danh mục', description: 'Yêu cầu role: Staff hoặc Admin' })
@@ -32,6 +36,18 @@ export class CategoryController {
       console.log("ok")
     }
     return this.categoryService.create(createCategoryDto);
+  }
+
+
+  
+  @Delete(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: HttpStatus.OK, description: 'Xóa thành công' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Xóa thất bại' })
+  @Roles([Role.Admin])
+  @ApiOperation({summary: 'Xóa danh mục theo ID',description: 'Yêu cầu Admin'})
+  async deleteCategory(@Param('id') id:string){
+    return this.categoryService.deleteCategory(id)
   }
 
   @Public()
@@ -45,16 +61,17 @@ export class CategoryController {
     res.sendFile(imagePath);
   } 
 
-  @Public()
-  @Get()
-  getFilterCategory(@Query('keyword') keyword: string) {
-    return this.categoryService.findCategoryWithSearch(keyword)
-  }
+  // @Public()
+  // @ApiOperation({ summary: 'Filter' })
+  // @Get()
+  // getFilterCategory(@Query('keyword') keyword: string) {
+  //   return this.categoryService.findCategoryWithSearch(keyword)
+  // }
 
   @Get()
-  @Roles([Role.Admin])
-  async getAllCategories(): Promise<Category[]> {
-    return this.categoryService.findAll();
+  @Public()
+  async getAllCategories(@Query() filterCateDto:SearchCategoryFilter): Promise<Category[]> {
+    return this.categoryService.findAll(filterCateDto.name);
   }
 
   @Get(':categoryId')

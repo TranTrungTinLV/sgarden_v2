@@ -41,7 +41,7 @@ export class CreateProductDto {
   @IsMongoId({ each: true })
   category_id: string[]; // Thêm trường này
 
-  @ApiProperty({ description: 'Tên danh mục', type: [String] })
+  // @ApiProperty({ description: 'Tên danh mục', type: [String] })
   @IsString()
   readonly categoryName: string[]; // Thêm trường này
 }
