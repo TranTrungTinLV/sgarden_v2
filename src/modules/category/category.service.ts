@@ -1,0 +1,64 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Product } from 'src/modules/product/schema/product.schema';
+
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { SearchCategoryFilter } from './dto/get-category-filter-dto';
+import { Category } from './schema/category.schema';
+
+@Injectable()
+export class CategoryService {
+  constructor(
+    @InjectModel('Category') private readonly categoryModel: Model<Category>,
+    @InjectModel(Product.name) private readonly productModel: Model<Product>,
+
+  ) {}
+
+  async findAll(): Promise<Category[]> {
+    console.log(this.categoryModel.find().populate('products','name price_original'))
+    return this.categoryModel.find().populate('products','name price_original price_new').exec();
+  }
+
+  async findCategoryWithSearch(keyword: string) {
+    if(!keyword){
+      console.log("lỗi")
+      return this.categoryModel.find().exec();
+    }
+    return this.categoryModel.find({
+      name: {
+        $regex: keyword, $options: 'i'
+      }
+    }).populate('products','name price_original price_new').exec();
+  }
+  async create(category: CreateCategoryDto): Promise<Category> {
+    const newCategory = await this.categoryModel.create(category);
+    return newCategory;
+  }
+
+  async findProductsByCategory(categoryId: string): Promise<Category> {
+    const category = (await this.categoryModel.findById(categoryId));
+    console.log(category);
+    return category.populate('products','name');
+  }
+  // create(createCategoryDto: CreateCategoryDto) {
+  //   return 'This action adds a new category';
+  // }
+
+  // findAll() {
+  //   return `This action returns all category`;
+  // }
+
+//  async findOne(id: string): Promise<Category[]> {
+//     const 
+//     return  `This action returns a #${id} category`;
+//   }
+
+  // update(id: number, updateCategoryDto: UpdateCategoryDto) {
+  //   return `This action updates a #${id} category`;
+  // }
+
+  // remove(id: string): Promise<Category> {
+  //   return `This action removes a #${id} category`;
+  // }
+}

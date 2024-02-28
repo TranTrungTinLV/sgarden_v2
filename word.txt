@@ -1,0 +1,6 @@
+#Schema cần trình bày rõ
+
+#Xem lại phần xác thực tại sao khi mà kiểm tra JWT thì trả về User còn log ra thì cả đống thông tin
+
+#JwtStrategy cơ chế xác thực 
+
