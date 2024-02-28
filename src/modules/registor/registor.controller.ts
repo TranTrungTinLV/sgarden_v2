@@ -8,11 +8,11 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/common/decorators/public.decorations';
 
 import { CreateRegistorDto } from './dto/create-registor.dto';
 import { RegistorService } from './registor.service';
-import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Register')
 @Public()

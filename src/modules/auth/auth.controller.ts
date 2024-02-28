@@ -1,15 +1,14 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Req, Request, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/common/decators/roles.decorator';
 import { Public } from 'src/common/decorators/public.decorations';
+import { RolesGuard } from 'src/common/guard/roles.gaurd';
 import { Role } from 'src/modules/users/schema/users.schema';
 import { UsersService } from 'src/modules/users/users.service';
 
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login-dto';
-import { RolesGuard } from 'src/common/guard/roles.gaurd';
-import { Response } from 'express';
 
 @ApiTags('Auth')
 @UseGuards(RolesGuard)
@@ -22,6 +21,7 @@ export class AuthController {
 
     @Public()
     @Post('login')
+    @ApiOperation({description: 'Đăng nhập'})
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: 'User login' })
     @ApiResponse({ status: HttpStatus.OK, description: 'Login successful' })
@@ -78,7 +78,8 @@ export class AuthController {
     return req.user
   }
 
-  @Roles(Roles[Role.Admin])
+  @Roles([Role.Admin])
+  @ApiOperation({summary: 'lấy hết user', description: 'Yêu cầu Admin'})
   @Get('users')
   getAll(){
     return this.userService.findAll()
@@ -87,5 +88,18 @@ export class AuthController {
   @Get()
   getFilter(@Query('keyword') keyword:string){
     return this.userService.findWithFilter(keyword)
+  }
+
+
+  //delete USer
+  @Roles([Role.Admin])
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'User delete' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Delete successful' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Lỗi xóa' })
+  @ApiOperation({summary: 'Xóa user', description: 'Yêu cầu Admin'})
+  @Delete(':id')
+  async deleteUser(@Param('id') id:string){
+    return this.userService.deleteUser(id)
   }
 }

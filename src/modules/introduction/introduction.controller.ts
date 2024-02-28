@@ -1,13 +1,16 @@
 import { Body, Controller, Get, Param, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { IntroductionService } from './introduction.service';
-import { Introduction } from './schema/introduction.shcema';
-import { IntroductionDto } from './dto/create-introdution';
-import { ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { multerOptions } from 'src/utils/uploadImage';
 import {FileInterceptor} from '@nestjs/platform-express'
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { join } from 'path';
+import { Roles } from 'src/common/decators/roles.decorator';
 import { Public } from 'src/common/decorators/public.decorations';
+import { multerOptions } from 'src/utils/uploadImage';
+
+import { Role } from '../users/schema/users.schema';
+import { IntroductionDto } from './dto/create-introdution';
+import { IntroductionService } from './introduction.service';
+import { Introduction } from './schema/introduction.shcema';
 @ApiSecurity('bearerAuth')
 @ApiTags('Introduction')
 @Controller('introduction')
@@ -16,6 +19,7 @@ export class IntroductionController {
 
 
   @Get()
+  @Public()
   async getAll(): Promise<Introduction[]> {
     return this.introductionService.findAll();
   }
@@ -35,7 +39,9 @@ export class IntroductionController {
     console.log('imagePath', imagePath)
     res.sendFile(imagePath);
   }
+
   @Post('')
+  @Roles([Role.Admin])
   @UseInterceptors(FileInterceptor('image',multerOptions('introductions')))
   async createIntroduction(
     @UploadedFile() file: Express.Multer.File,

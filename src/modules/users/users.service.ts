@@ -76,4 +76,15 @@ export class UsersService {
   async updateRefreshToken(userId: string,refreshToken: string): Promise<void> {
      await this.UserModel.findByIdAndUpdate(userId,{refreshToken});
   }
+  
+  async deleteUser(id: string):Promise<User> {
+    const result = await this.UserModel.findByIdAndDelete(
+      id
+    )
+    if(!result){
+      console.log(`${result}`)
+      throw new NotFoundException(`Không tồn tại người dùng này`)
+    }
+    return result
+  }
 }

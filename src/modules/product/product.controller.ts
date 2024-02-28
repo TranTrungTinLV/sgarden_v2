@@ -68,7 +68,6 @@ export class ProductController {
   @Patch(':productId')
   @Roles([Role.Admin,Role.Staff])
   @ApiOperation({ summary: 'Cập nhật sản phẩm', description: 'Yêu cầu role: Staff hoặc Admin' })
-
   async updateProduct(
     @Param('productId') productId: string,
     @Body() updateProductDto: UpdateProductDto,
@@ -80,7 +79,6 @@ export class ProductController {
   @Delete(':productId')
   @Roles([Role.Admin,Role.Staff])
   @ApiOperation({ summary: 'Xoá Sản phẩm', description: 'Yêu cầu role: Staff hoặc Admin' })
-
   async deleteProduct(
     @Param('productId') productId:string
   ){
@@ -97,7 +95,6 @@ export class ProductController {
   @Get()
   @Public()
   @ApiOperation({ summary: 'Lấy hết sản phẩm', description: 'Yêu cầu role: Staff hoặc Admin, User' })
-
   async getAllProducts(): Promise<Product[]> {
     return this.productService.findAllProducts();
   }
@@ -105,7 +102,6 @@ export class ProductController {
   @Patch(':productId/stock')
   @Roles([Role.Admin,Role.Staff])
   @ApiOperation({ summary: 'cập nhật số lượng tồn kho sản phẩm', description: 'Yêu cầu role: Staff hoặc Admin' })
-
   async updateProductStock(
     @Param('productId') productId:string,
     @Body('quantityStock') quantityStock: number
