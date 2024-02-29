@@ -10,6 +10,8 @@ export class Category extends Document {
     @Prop({unique: [true, 'it exists']})
     name: string;
 
+    @Prop({unique: [false]})
+    description: string;
     //Many to Many
     @Prop({type: [mongoose.Schema.Types.ObjectId], ref: 'Product'})
     products: Product[];

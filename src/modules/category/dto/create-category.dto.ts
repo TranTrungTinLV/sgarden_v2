@@ -9,8 +9,12 @@ export class CreateCategoryDto {
     @IsString()
     readonly name: string;
 
+    @ApiProperty({
+        description: 'mô tả danh mục'
+    })
+    @IsString()
+    readonly description: string;
+
     @ApiProperty({description: 'hình ảnh'})
     image: string;
-    
-    
 }

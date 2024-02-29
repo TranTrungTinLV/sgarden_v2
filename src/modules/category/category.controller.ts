@@ -29,9 +29,10 @@ export class CategoryController {
   @UseInterceptors(FileInterceptor('image',multerOptions('categoryImage')))
   @Roles([Role.Staff,Role.Admin])
   @ApiOperation({ summary: 'Tạo danh mục', description: 'Yêu cầu role: Staff hoặc Admin' })
-  create(@Body() createCategoryDto: CreateCategoryDto,@UploadedFile() file: Express.Multer.File) {
+  create(@Body() createCategoryDto: CreateCategoryDto,
+  @UploadedFile() file: Express.Multer.File) {
     if(file){
-      createCategoryDto.image = file.path
+      createCategoryDto.image = `/images/categoryImage/${file.filename}`
       console.log(file)
       console.log("ok")
     }
@@ -57,7 +58,8 @@ export class CategoryController {
     if(!file){
       res.statusMessage
     }
-    const imagePath = join(process.cwd(), 'storage/images/categoryImage', file);
+    const imagePath = join(process.cwd(), 'storage/images/categoryImage', file.filename);
+    console.log("imagePath",imagePath)
     res.sendFile(imagePath);
   } 
 
