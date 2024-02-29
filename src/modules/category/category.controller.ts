@@ -1,4 +1,4 @@
-import { Body, Controller, Delete,Get, HttpCode, HttpStatus, Param, Post, Query, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete,Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -13,6 +13,7 @@ import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { SearchCategoryFilter } from './dto/get-category-filter-dto';
 import { Category } from './schema/category.schema';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @ApiSecurity('bearerAuth')
 @ApiTags('Category')
@@ -53,7 +54,6 @@ export class CategoryController {
 
   @Public()
   @Get('/categoryImage/:file')
-  
   async getPicture(@Param('file') file, @Res() res:Response) {
     if(!file){
       res.statusMessage
@@ -80,6 +80,12 @@ export class CategoryController {
   @Public()
   findOne(@Param('categoryId') categoryId: string): Promise<Category> {
     return this.categoryService.findProductsByCategory(categoryId);
+  }
+
+  @Patch(':id')
+  @Roles([Role.Admin])
+  async update(@Param('id')id:string, @Body() UpdateCategoryDto){
+    return this.categoryService.updateCategory(id,UpdateCategoryDto)
   }
 }
 

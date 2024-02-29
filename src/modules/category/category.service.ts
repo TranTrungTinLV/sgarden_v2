@@ -6,6 +6,7 @@ import { Product } from 'src/modules/product/schema/product.schema';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { SearchCategoryFilter } from './dto/get-category-filter-dto';
 import { Category } from './schema/category.schema';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -59,6 +60,17 @@ export class CategoryService {
     }else{
       return result;
     }
+  }
+
+  //Sửa sản phẩm theo tên
+  async updateCategory(id:string,updateCategory: UpdateCategoryDto): Promise<Category>{
+    const category = await this.categoryModel.findById(id);
+    if(!category){
+      throw new Error(`Không tìm thấy ID ${id} để cập nhật danh mục`)
+    }
+    //update category
+    category.name = updateCategory.name;
+    return category.save()
   }
   // create(createCategoryDto: CreateCategoryDto) {
   //   return 'This action adds a new category';
