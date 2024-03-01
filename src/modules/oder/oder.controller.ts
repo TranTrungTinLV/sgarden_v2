@@ -19,6 +19,7 @@ import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { Public } from 'src/common/decorators/public.decorations';
 import { AuthGuard } from '@nestjs/passport';
+import { UpdateOrderStatusDto } from './dto/updateOder-dto';
 
 @ApiSecurity('bearerAuth')
 @ApiTags('Order')
@@ -88,7 +89,7 @@ export class OderController {
   @Patch(':orderId/confirm')
   @Roles([Role.Staff,Role.Admin])
   @ApiOperation({ summary: 'xác nhận đơn hàng', description: 'Yêu cầu role: Staff va Admin' })
-  confirmOrder(@Param('orderId') orderId: string) {
-    return this.orderService.confirmOrder(orderId);
+  confirmOrder(@Param('orderId') orderId: string,@Body() updateOrderStatus:UpdateOrderStatusDto) {
+    return this.orderService.confirmOrderAndUpdatePoints(orderId,updateOrderStatus.status,updateOrderStatus.points);
   }
 }

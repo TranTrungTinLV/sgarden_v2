@@ -88,7 +88,7 @@ export class OrderService {
 
     // Cập nhật thông tin người dùng với ID sản phẩm đã mua
     console.log('purchaseProduct',purchaseProduct) 
-    await this.userService.updateScoreAndLevel(user.username,1); // Tăng điểm lên 1 sau mỗi đơn hàng
+    // await this.userService.updateScoreAndLevel(user.username,1); // Tăng điểm lên 1 sau mỗi đơn hàng
 
     // await this.updateUserOrderScore(user._id)
 
@@ -167,42 +167,24 @@ export class OrderService {
     // const result
     return orderUser
   }
-  //Confirm sản phẩm khi users đặt hàng
-  async confirmOrder(orderId:string): Promise<Order>  {
+  // Confirm sản phẩm khi users đặt hàng
+  async confirmOrderAndUpdatePoints(orderId: string, newStatus: string, pointsToAdd: number): Promise<Order> {
     const order = await this.orderModel.findById(orderId);
-    console.log(order)
     if (!order) {
       throw new NotFoundException('Order not found');
     }
-    order.status = 'confirm';
-    return order.save();
+  
+    order.status = newStatus;
+    await order.save();
+  
+    if (newStatus === 'CONFIRMED') { // Sử dụng giá trị thực tế cho trạng thái xác nhận
+      await this.userService.addPoints(order.customer_id._id, pointsToAdd);
+    }
+  
+    return order;
   }
+  
 
-  // private async updateUserOrderScore(userSlug: string) {
-  //   const user = await this.userModel.findOne({
-  //     username: userSlug
-  //   });
-  //   console.log(user)
-  //   if(!user) {
-  //     throw new NotFoundException(`User with ID ${userSlug} không tôn tại nên không thể cập nhật điểm`);
-  //   }
-
-  //   //Tăng số lần đặt hàng và kiểm tra điều kiện tích điểm
-  //   user.score = (user.score || 0) + 1;
-  //   const newLevel = await this.levelService.determineMemberLevel(user.score);
-  //   console.log(newLevel)
-  //   user.level_member = newLevel._id
-  //   // console.log(score)
-  //   // const newLevel = await this.levelService.determineMemberLevel(score)
-  //   // user.level_member = newLevel._id
-  //   // if(user.score >= 5) {
-  //   //   //Tích điểm và reset số lần đặt hàng
-  //   //   // await this.userService.updateMemberPoints(userSlug,1);
-  //   //   user.score = 0;
-  //   //   console.log("tăng điểm")
-  //   // }
-  //   await user.save();
-  // }
   }
 
 

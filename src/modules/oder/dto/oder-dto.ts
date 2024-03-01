@@ -37,6 +37,7 @@ export class oderDto {
   @IsMongoId({ each: true })
   products: string[];
 
+  
   @ApiProperty({ example: 2, description: 'Số lượng', required: false })
   @IsNumber()
   readonly quantity?: number;

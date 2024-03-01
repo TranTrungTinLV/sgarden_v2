@@ -17,6 +17,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { MailerModule } from './modules/mailer/mailer.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { CountdownModule } from './modules/countdown/countdown.module';
 
 @Module({
   imports: [
@@ -44,7 +45,8 @@ import { join } from 'path';
     CategoryModule,
     DiscountcodeModule,
     LevelMemberModule,
-    MailerModule
+    MailerModule,
+    CountdownModule
   ],
 })
 export class AppModule {}

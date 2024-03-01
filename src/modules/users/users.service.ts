@@ -56,7 +56,7 @@ export class UsersService {
     return await this.UserModel.findByIdAndUpdate(userId, {
       $push: { orders: { $each: orderIds } }
     }, { new: true }).exec();
-    // return updatedUser;
+   
   }
 
   async findOneWithPassword(username: string) {
@@ -64,20 +64,19 @@ export class UsersService {
     return user;
   }
 
-  async updateScoreAndLevel(username: string, points: number){
-    const user = await this.UserModel.findOne({username});
+  async addPoints(userId: string, points: number): Promise<User> {
+    const user = await this.UserModel.findById(userId);
     if (!user) {
-      throw new NotFoundException(`User not found with ID: ${user}`);
+      throw new NotFoundException(`User not found with ID: ${userId}`);
     }
-
+  
     user.score += points;
-    await user.save();
-    
+    console.log(points)
+    // Cập nhật cấp độ thành viên tùy thuộc vào điểm mới
     const newLevel = (await this.levelMemberService.determineMemberLevel(user.score))._id;
-    console.log(newLevel)
-    user.level_member = newLevel; // Gán ObjectId của LevelMember
+    user.level_member = newLevel;
     await user.save();
-    // return user;
+    return user
   }
 
   async updateRefreshToken(userId: string,refreshToken: string): Promise<void> {

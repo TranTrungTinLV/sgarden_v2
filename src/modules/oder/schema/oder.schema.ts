@@ -60,6 +60,8 @@ export class Order extends Document {
 
   @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'DiscountCode'})
   discountCode: DiscountCode | Types.ObjectId; //đây là discount
+
+
 }
 
 export const OderSchema = SchemaFactory.createForClass(Order);
