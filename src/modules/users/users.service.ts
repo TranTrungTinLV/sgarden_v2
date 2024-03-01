@@ -51,6 +51,13 @@ export class UsersService {
     }
   }
   
+  //addPurchaseProducts
+  async addPurchasedProducts(userId: string, orderIds: string[]): Promise<User> {
+    return await this.UserModel.findByIdAndUpdate(userId, {
+      $push: { orders: { $each: orderIds } }
+    }, { new: true }).exec();
+    // return updatedUser;
+  }
 
   async findOneWithPassword(username: string) {
     const user = await this.UserModel.findOne({ username });

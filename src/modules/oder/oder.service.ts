@@ -84,6 +84,10 @@ export class OrderService {
 
     //Lưu đơn hàng cái
     const savedOrder = await order.save();
+    const purchaseProduct = await this.userService.addPurchasedProducts(custormer._id,products)
+
+    // Cập nhật thông tin người dùng với ID sản phẩm đã mua
+    console.log('purchaseProduct',purchaseProduct) 
     await this.userService.updateScoreAndLevel(user.username,1); // Tăng điểm lên 1 sau mỗi đơn hàng
 
     // await this.updateUserOrderScore(user._id)
@@ -157,7 +161,12 @@ export class OrderService {
     return order.save();
   }
 
-
+  //find user by id
+  async findOrderBysUserId(userId:string): Promise<Order[]>{
+    const orderUser = await this.orderModel.find({ customer_id: userId }).populate('customer_id','username').populate('products','name').exec();
+    // const result
+    return orderUser
+  }
   //Confirm sản phẩm khi users đặt hàng
   async confirmOrder(orderId:string): Promise<Order>  {
     const order = await this.orderModel.findById(orderId);

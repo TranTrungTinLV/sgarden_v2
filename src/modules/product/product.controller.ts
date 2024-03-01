@@ -15,19 +15,19 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { AnyFilesInterceptor, FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { Public } from 'src/common/decorators/public.decorations';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { RolesGuard } from 'src/common/guard/roles.gaurd';
 import { Role } from 'src/modules/users/schema/users.schema';
 import { UsersService } from 'src/modules/users/users.service';
+import { multerOptions } from 'src/utils/uploadImage';
 
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
 import { ProductService } from './product.service';
 import { Product } from './schema/product.schema';
-import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { Public } from 'src/common/decorators/public.decorations';
-import { AnyFilesInterceptor, FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { multerOptions } from 'src/utils/uploadImage';
 
 @ApiSecurity('bearerAuth')
 @ApiTags('Product')
@@ -85,6 +85,15 @@ export class ProductController {
     return this.productService.deleteProduct(productId)
   }
 
+  //Xóa nhiều sản phẩm
+  @Delete()
+  @Roles([Role.Admin])
+  @ApiOperation({ summary: 'Xoá nhiều sản phẩm', description: 'Yêu cầu role: Admin' })
+  async deleteManyProducts(
+    @Body() ids: string[]
+  ): Promise<any> {
+    return this.productService.deleteMany(ids)
+  }
   //lấy sản phẩm
   @Get(':id')
   @Public()

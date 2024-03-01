@@ -84,6 +84,7 @@ export class User extends Document {
   @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Product' })
   product: Product[];
 
+
   //One to Many Order
   @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Order' })
   orders: Order[];

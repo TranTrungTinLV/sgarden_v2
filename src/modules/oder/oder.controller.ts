@@ -16,6 +16,9 @@ import { oderDto } from './dto/oder-dto';
 import { OrderService } from './oder.service';
 import { Order } from './schema/oder.schema';
 import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
+import { Public } from 'src/common/decorators/public.decorations';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiSecurity('bearerAuth')
 @ApiTags('Order')
@@ -40,6 +43,15 @@ export class OderController {
   @ApiOperation({ summary: 'lấy đơn hàng', description: 'Yêu cầu role: Admin or Staff' })
   async getAllOrder(): Promise<Order[]> {
     return this.orderService.findAll();
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('my-order')
+  @ApiOperation({summary: 'Lấy đơn hàng khi đang nhập'})
+  async getUserLoginByid(@Req() request: any): Promise<Order[]> {
+    const user = request.user;
+    console.log(user)
+    return this.orderService.findOrderBysUserId(user.id);
   }
 
   @Get(':orderId')

@@ -83,4 +83,13 @@ export class ProductService {
     product.quantityInStock = newStock;
     return product.save();
   }
+
+  async deleteMany(ids: string[]):Promise<any> {
+    const result = await this.productModel.deleteMany({_id: {$in: ids}});
+    if(result.deletedCount === 0) {
+      console.log(result)
+      throw new NotFoundException(`Không tìm thấy sản phẩm để xóa`);
+    }
+    return result;
+  }
 }
