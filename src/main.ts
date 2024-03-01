@@ -27,6 +27,7 @@ async function bootstrap() {
     .addTag('Information')
     .addTag('Introduction')
     .addTag('Order')
+    .addTag('CountDown')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
