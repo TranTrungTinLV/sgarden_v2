@@ -93,4 +93,21 @@ export class UsersService {
     }
     return result
   }
-}
+
+  async blockUser(userId: string): Promise<User> {
+    const user = await this.UserModel.findByIdAndUpdate(userId,{isBlocked: true},{new:true}).exec();
+    if (!user) {
+      throw new NotFoundException(`User not found with ID: ${userId}`);
+    }
+    return user
+  }
+
+  async unblockUser(userId: string): Promise<User> {
+    const user = await this.UserModel.findByIdAndUpdate(userId,{isBlocked: false},{new:true}).exec();
+    if (!user) {
+      throw new NotFoundException(`User not found with ID: ${userId}`);
+    }
+    return user
+  }
+  }
+

@@ -97,6 +97,9 @@ export class User extends Document {
 
   @Prop({type: mongoose.Schema.Types.String})
   refreshToken: string //refreshtoken
+
+  @Prop({type: mongoose.Schema.Types.Boolean, default: false})
+  isBlocked: boolean
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -15,7 +15,7 @@ export class CountdownService {
         const newEvent = this.countdownEventModel.create(createCountdownEventDto);
         return newEvent;
     }
-    // Lấy các CountdownEvent đang hiển thị
+    // Lấy các CountdownEvent đang hiển thị phụ thuộc vào is_show
   async findEventsToShow(): Promise<CountDownEvent[]> {
     return this.countdownEventModel.find({ is_show: true }).exec();
   }

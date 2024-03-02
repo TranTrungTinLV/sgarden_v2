@@ -21,6 +21,9 @@ export class AuthService {
 
     const user = await this.usersService.findOneWithPassword(username);
     console.log(user)
+    if(!user || user.isBlocked){
+      throw new UnauthorizedException('Tài khoản của người dùng này đã bị khoá')
+    }
     const encryptedPassword = crypto
       .createHash('sha256')
       .update(pwd)

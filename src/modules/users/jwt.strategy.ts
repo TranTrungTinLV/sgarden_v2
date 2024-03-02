@@ -34,6 +34,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       return new UnauthorizedException('Login first to access this endpoint.');
     }
+    if(user.isBlocked){
+      return new UnauthorizedException('Tài khoản này đã bị chặn')
+    }
     return user;
   }
 

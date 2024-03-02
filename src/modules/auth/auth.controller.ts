@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiProperty, ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/common/decators/roles.decorator';
 import { Public } from 'src/common/decorators/public.decorations';
 import { RolesGuard } from 'src/common/guard/roles.gaurd';
-import { Role } from 'src/modules/users/schema/users.schema';
+import { Role, User } from 'src/modules/users/schema/users.schema';
 import { UsersService } from 'src/modules/users/users.service';
 
 import { AuthService } from './auth.service';
@@ -13,6 +13,8 @@ import { LoginDto } from './dto/login-dto';
 @ApiTags('Auth')
 @UseGuards(RolesGuard)
 @Controller('auth')
+
+@ApiSecurity('bearerAuth')
 export class AuthController {
   constructor(
     private authService: AuthService,
@@ -101,5 +103,21 @@ export class AuthController {
   @Delete(':id')
   async deleteUser(@Param('id') id:string){
     return this.userService.deleteUser(id)
+  }
+
+  //blocked User
+  @ApiOperation({ summary: 'User block' })
+  @Patch(':userId/block-user')
+  @Roles([Role.Admin])
+  async blockUser(@Param('userId') userId: string){
+    return this.userService.blockUser(userId)
+  }
+
+  //unblocked User
+  @ApiOperation({ summary: 'User unblock' })
+  @Patch(':userId/unblock-user')
+  @Roles([Role.Admin])
+  async unblockUser(@Param('userId') userId: string){
+    return this.userService.unblockUser(userId)
   }
 }
