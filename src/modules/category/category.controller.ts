@@ -1,4 +1,4 @@
-import { Body, Controller, Delete,Get, HttpCode, HttpStatus, Param, Post, Query, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete,Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -13,6 +13,7 @@ import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { SearchCategoryFilter } from './dto/get-category-filter-dto';
 import { Category } from './schema/category.schema';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @ApiSecurity('bearerAuth')
 @ApiTags('Category')
@@ -50,23 +51,26 @@ export class CategoryController {
     return this.categoryService.deleteCategory(id)
   }
 
+  //sửa danh mục
+  @Patch(':categoryId')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: HttpStatus.OK, description: 'cập nhật danh mục thành công' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'cập nhật danh mục thất bại' })
+  @Roles([Role.Admin])
+  async updateCategory(@Param('categoryId') categoryId: string ,@Body() updateCategoryDto: UpdateCategoryDto){
+    return this.categoryService.updateCategory(categoryId,updateCategoryDto)
+  }
+
+
   @Public()
   @Get('/categoryImage/:file')
-  
   async getPicture(@Param('file') file, @Res() res:Response) {
     if(!file){
       res.statusMessage
     }
     const imagePath = join(process.cwd(), 'storage/images/categoryImage', file);
     res.sendFile(imagePath);
-  } 
-
-  // @Public()
-  // @ApiOperation({ summary: 'Filter' })
-  // @Get()
-  // getFilterCategory(@Query('keyword') keyword: string) {
-  //   return this.categoryService.findCategoryWithSearch(keyword)
-  // }
+  }
 
   @Get()
   @Public()

@@ -1,11 +1,11 @@
-import { HttpCode, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Product } from 'src/modules/product/schema/product.schema';
 
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { SearchCategoryFilter } from './dto/get-category-filter-dto';
 import { Category } from './schema/category.schema';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -16,10 +16,14 @@ export class CategoryService {
   ) {}
 
   async findAll(keyword?:string): Promise<Category[]> {
+    let query = {}
     if (keyword) {
-      return this.categoryModel.find({
-        name: { $regex: keyword, $options: 'i' },
-      }).populate('products', 'name price_original price_new').exec();
+      query = {name: { $regex: keyword, $options: 'i' },}
+      const category = await this.categoryModel.find(query).populate('products', 'name price_original price_new').exec();
+      if(category.length === 0){
+         throw new NotFoundException(`Oops, we don’t have any results for "${keyword}"`);
+      }
+      return category
     } else {
       return this.categoryModel.find().populate('products', 'name price_original price_new image').exec();
     }
@@ -51,7 +55,6 @@ export class CategoryService {
   }
 
   //Xóa Danh mục
-  
   async deleteCategory(id:string) {
     const result = await this.categoryModel.deleteOne({_id: id})
     if(result.deletedCount === 0) {
@@ -60,24 +63,16 @@ export class CategoryService {
       return result;
     }
   }
-  // create(createCategoryDto: CreateCategoryDto) {
-  //   return 'This action adds a new category';
-  // }
 
-  // findAll() {
-  //   return `This action returns all category`;
-  // }
+  //sửa tên danh mục
+  async updateCategory(categoryId: string,updateCategory: UpdateCategoryDto): Promise<Category>{
+    const category = await this.categoryModel.findById(categoryId);
+    if(!category){
+      throw new NotFoundException(`Không tìm thấy ID ${category} để chỉnh sửa`)
+    }
 
-//  async findOne(id: string): Promise<Category[]> {
-//     const 
-//     return  `This action returns a #${id} category`;
-//   }
-
-  // update(id: number, updateCategoryDto: UpdateCategoryDto) {
-  //   return `This action updates a #${id} category`;
-  // }
-
-  // remove(id: string): Promise<Category> {
-  //   return `This action removes a #${id} category`;
-  // }
+    //update category name only name
+    category.name = updateCategory.name;
+    return category.save()
+  }
 }

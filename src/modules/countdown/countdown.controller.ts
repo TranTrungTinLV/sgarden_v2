@@ -19,15 +19,12 @@ export class CountdownController {
         private readonly countdownEventService: CountdownService
     ){}
 
-@ApiOperation({ summary: 'tạo sự kiện', description: 'Yêu cầu role: Admin' })
-
+  @ApiOperation({ summary: 'tạo sự kiện', description: 'Yêu cầu role: Admin' })
   @Post()
   @Roles([Role.Admin])
   create(@Body() createCountDownEvent: CountDownDto){
     return this.countdownEventService.create(createCountDownEvent)
   }
-
-  
 
   // phía user
   @Get('/show')

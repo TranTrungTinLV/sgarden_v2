@@ -56,7 +56,6 @@ export class UsersService {
     return await this.UserModel.findByIdAndUpdate(userId, {
       $push: { orders: { $each: orderIds } }
     }, { new: true }).exec();
-   
   }
 
   async findOneWithPassword(username: string) {

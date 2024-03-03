@@ -9,6 +9,7 @@ import {
   ParseFilePipe,
   Patch,
   Post,
+  Query,
   Req,
   UploadedFile,
   UploadedFiles,
@@ -28,6 +29,7 @@ import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
 import { ProductService } from './product.service';
 import { Product } from './schema/product.schema';
+import { CreateReviewDto } from './dtos/create-review.dto';
 
 @ApiSecurity('bearerAuth')
 @ApiTags('Product')
@@ -104,8 +106,8 @@ export class ProductController {
   @Get()
   @Public()
   @ApiOperation({ summary: 'Lấy hết sản phẩm', description: 'Yêu cầu role: Staff hoặc Admin, User' })
-  async getAllProducts(): Promise<Product[]> {
-    return this.productService.findAllProducts();
+  async getAllProducts(@Query() filterProductDto: CreateProductDto): Promise<Product[]> {
+    return this.productService.findAllProducts(filterProductDto.name);
   }
 
   @Patch(':productId/stock')
@@ -116,5 +118,18 @@ export class ProductController {
     @Body('quantityStock') quantityStock: number
   ) {
     return this.productService.updateProductStock(productId,quantityStock)
+  }
+
+  @Post(':productId/reviews')
+  @Roles([Role.User])
+  // @Public()
+  async addReview(
+    @Param('productId') productId: string,
+    @Body() creatReviewDto: CreateReviewDto,
+    @Req() request: any
+  ): Promise<Product>{
+    const username = request.user.username;
+    console.log(username)
+    return this.productService.addReview(productId,username,creatReviewDto)
   }
 }

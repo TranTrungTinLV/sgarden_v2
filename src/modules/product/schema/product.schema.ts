@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, Types } from 'mongoose';
 import { Category } from 'src/modules/category/schema/category.schema';
 import { Order } from 'src/modules/oder/schema/oder.schema';
+import { Review } from './product_review.schema';
 // import { User } from 'src/users/schema/users.schema';
 
 @Schema({
@@ -15,7 +16,6 @@ export class Product extends Document {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category' })
   category_id: Types.ObjectId;
 
-
   @Prop({ type: [String], required: true })
   images?: string[];
   
@@ -28,8 +28,8 @@ export class Product extends Document {
   @Prop({ type: mongoose.Schema.Types.Number, required: true })
   price_new: number;
 
-  @Prop({type: [mongoose.Schema.Types.ObjectId],ref:'Review'})
-  reviews: Types.ObjectId[];
+  @Prop([{ type: Object }])
+  reviews: Review[];
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   owner: mongoose.Types.ObjectId;

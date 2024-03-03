@@ -13,9 +13,9 @@ export class CreateReviewDto {
   @IsInt({ message: 'Rate must be an integer' })
   @Min(1, { message: 'Rate must be at least 1' })
   @Max(5, { message: 'Rate must be at most 5' })
-  star: number;
+  readonly star: number;
 
   @IsString()
   @IsOptional()
-  content: string;
+  readonly content: string;
 }

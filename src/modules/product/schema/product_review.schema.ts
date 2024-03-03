@@ -1,19 +1,22 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { User } from 'src/modules/users/schema/users.schema';
 
 @Schema({
     timestamps: true
 })
 export class Review {
-  @Prop()
-  star: number; // số sao đánh giá
-
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  customerId: User;
+customerId: Types.ObjectId;
 
-  @Prop()
-  content: string; // nội dung đánh giá
+@Prop()
+star: number;
+
+@Prop()
+content: string;
+
+@Prop()
+username: string
 }
 
 export const ReviewSchema = SchemaFactory.createForClass(Review);

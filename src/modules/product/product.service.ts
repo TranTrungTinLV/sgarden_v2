@@ -1,12 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Category } from 'src/modules/category/schema/category.schema';
 import { UsersService } from 'src/modules/users/users.service';
 
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
 import { Product } from './schema/product.schema';
+import { CreateReviewDto } from './dtos/create-review.dto';
+import { User } from '../users/schema/users.schema';
 
 @Injectable()
 export class ProductService {
@@ -59,15 +61,38 @@ export class ProductService {
 
   // Xóa sản phẩm
   async deleteProduct(productId:string): Promise<any> {
+    const product = await this.productModel.findById(productId);
+    if(!product){
+      throw new NotFoundException(`Không tìm thấy sản phẩm với ID ${productId}`);
+    }
     const result = await this.productModel.deleteOne({_id: productId});
     if(result.deletedCount === 0) {
       throw new NotFoundException(`Không tìm thấy ${productId} để xóa`)
     }
+    // Cập nhật danh mục bằng cách loại bỏ sản phẩm khỏi danh sách sản phẩm của danh mục
+    await this.categoryModel.findByIdAndUpdate(product.category_id,{
+      $pull: {
+        products: productId
+      }
+    })
     return result;
   }
 
-  async findAllProducts(): Promise<Product[]> {
-    return this.productModel.find().populate('owner','username').populate('images');
+  async findAllProducts(keyword?:string): Promise<Product[]> {
+    let query = {};
+    if(keyword){
+      query = {name: {$regex: keyword, $options: 'i' }}
+      const products = await this.productModel.find(query).populate('owner','username').exec();
+      if(products.length === 0){
+        throw new NotFoundException(`Oops, we don’t have any results for "${keyword}"`);
+      }
+      return products
+    }
+    else
+    {
+      return this.productModel.find().populate('owner','username').populate('images');
+
+    }
   }
 
   async findByIdProduct(productId: string): Promise<Product> {
@@ -92,4 +117,36 @@ export class ProductService {
     }
     return result;
   }
+
+  async addReview(productId: string, customerId: string, createReviewDto: CreateReviewDto): Promise<Product> {
+    // Đảm bảo rằng customer tồn tại
+    const customer = await this.usersService.findOne(customerId);
+    if (!customer) {
+      throw new NotFoundException(`Không tìm thấy người dùng với ID ${customerId}`);
+    }
+  
+    // Tìm sản phẩm
+    const product = await this.productModel.findById(productId);
+    if (!product) {
+      throw new NotFoundException(`Không tìm thấy sản phẩm với ID ${productId}`);
+    }
+  
+    // Tạo review mới và bao gồm customerId
+    const review = {
+      ...createReviewDto,
+      customerId: customer._id, // Sử dụng _id của customer đã tìm được
+      username: customer.username
+    };
+    console.log(review)
+  
+    // Thêm review vào sản phẩm
+    product.reviews.push(review);
+  
+    // Lưu sản phẩm đã cập nhật
+    await product.save();
+  
+    // Trả về sản phẩm đã cập nhật
+    return product;
+  }
+  
 }

@@ -92,4 +92,17 @@ export class OderController {
   confirmOrder(@Param('orderId') orderId: string,@Body() updateOrderStatus:UpdateOrderStatusDto) {
     return this.orderService.confirmOrderAndUpdatePoints(orderId,updateOrderStatus.status,updateOrderStatus.points);
   }
+
+  //lấy số liệu thống kê theo ngày tháng năm
+  @Get('revenue/statistics')
+  @Roles([Role.Admin])
+  @ApiOperation({ summary: 'lấy thống kê đơn hàng đã xác nhận', description: 'Yêu cầu role: Admin' })
+
+  async getRevenueStatistics(){
+    const today = new Date();
+    const startDate = new Date(today.setHours(0,0,0,0));
+    const endDate = new Date(today.setHours(23,59,59,999));
+    
+    return this.orderService.getStaticalOrder(startDate, endDate, 'day');
+  }
 }

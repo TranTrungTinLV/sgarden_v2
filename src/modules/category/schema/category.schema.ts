@@ -7,7 +7,7 @@ import { Product } from 'src/modules/product/schema/product.schema';
     timestamps: true
 })
 export class Category extends Document {
-    @Prop({unique: [true, 'it exists']})
+    @Prop({unique: [true, 'it exists'], required: [true, "Vui lòng nhập tên danh mục"]})
     name: string;
 
     //Many to Many

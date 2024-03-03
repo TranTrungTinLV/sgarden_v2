@@ -184,6 +184,36 @@ export class OrderService {
     return order;
   }
   
+  // statical
+   //statical order
+   async getStaticalOrder(startDate: Date, endDate: Date, filterType: string): Promise<any>{
+    // const aggregationPipeline = [
+    //   {
+        
+    //   }
+    // ]
+    return await this.orderModel.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate, $lte: endDate },
+          status: 'CONFIRMED'
+        }
+      },
+      {
+        $group: {
+          _id: {
+            $dateTrunc: {
+              date: "$createdAt",
+              unit: filterType
+            }
+          },
+          count: { $sum: 1 },
+          totalRevenue: { $sum: "$total_price" }
+        }
+      }
+  ]). exec()
+  }
+
 
   }
 
