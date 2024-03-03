@@ -121,7 +121,7 @@ export class ProductController {
   }
 
   @Post(':productId/reviews')
-  @ApiOperation({ summary: 'Review comment', description: 'User' })
+  @ApiOperation({ summary: 'Review comment', description: 'User, star tối đa từ 1 đến 5' })
 
   @Roles([Role.User])
   // @Public()
