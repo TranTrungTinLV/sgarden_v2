@@ -121,6 +121,8 @@ export class ProductController {
   }
 
   @Post(':productId/reviews')
+  @ApiOperation({ summary: 'Review comment', description: 'User' })
+
   @Roles([Role.User])
   // @Public()
   async addReview(
