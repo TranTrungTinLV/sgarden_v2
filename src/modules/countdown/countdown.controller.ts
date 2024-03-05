@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiBody, ApiConsumes, ApiOperation, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { Roles } from "src/common/decators/roles.decorator";
@@ -47,6 +47,14 @@ export class CountdownController {
     }
     return this.countdownEventService.create(createCountDownEvent)
   }
+
+  @Put(':countdownId')
+  @Roles([Role.Admin])
+  @UseInterceptors(FileInterceptor('image',multerOptions('countdown')))
+  async updateCountDown(@Param('countdownId') countdownId: string, @Body() updateCountDownDto: CountDownDto){
+    return await this.countdownEventService.update(countdownId,updateCountDownDto)
+  }
+  
 
   // phía user
   @Get('/show')

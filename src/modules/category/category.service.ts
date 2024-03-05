@@ -19,13 +19,13 @@ export class CategoryService {
     let query = {}
     if (keyword) {
       query = {name: { $regex: keyword, $options: 'i' },}
-      const category = await this.categoryModel.find(query).populate('products', 'name price_original price_new').exec();
+      const category = await this.categoryModel.find(query).populate('products', 'name price_original price_new images').exec();
       if(category.length === 0){
          throw new NotFoundException(`Oops, we don’t have any results for "${keyword}"`);
       }
       return category
     } else {
-      return this.categoryModel.find().populate('products', 'name price_original price_new image').exec();
+      return this.categoryModel.find().populate('products', 'name price_original price_new images').exec();
     }
     // console.log(this.categoryModel.find().populate('products','name price_original'))
     // return this.categoryModel.find().populate('products','name price_original price_new').exec();
@@ -40,7 +40,7 @@ export class CategoryService {
       name: {
         $regex: keyword, $options: 'i'
       }
-    }).populate('products','name price_original price_new').exec();
+    }).populate('products','name price_original price_new images').exec();
   }
 
   async create(category: CreateCategoryDto): Promise<Category> {
