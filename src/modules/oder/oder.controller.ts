@@ -20,6 +20,7 @@ import { Request } from 'express';
 import { Public } from 'src/common/decorators/public.decorations';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateOrderStatusDto } from './dto/updateOder-dto';
+import { OptionalAuthGuard } from 'src/common/guard/option-gaurd';
 
 @ApiSecurity('bearerAuth')
 @ApiTags('Order')
@@ -29,12 +30,18 @@ export class OderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  @Roles([Role.User,Role.Admin])
+  // @Roles([Role.User,Role.Admin])
+  @UseGuards(OptionalAuthGuard)
+  @Public()
   @ApiOperation({ summary: 'order món', description: 'Yêu cầu role: User, mã giảm giá discountcode có thì user nhập vào không có thì thôi không bắt buộc nhập ' })
-
   async createOrder(@Body() createOrderDto: oderDto, @Req() request: any) {
     console.log(createOrderDto);
-    const user = request.user;
+    const user = request.user ? request.user : null; 
+    if (request.user) {
+      console.log(user)
+    } else {
+      console.log('Khach vãng lai')
+    }
     // console.log(user);
     return this.orderService.createOrder(user, createOrderDto);
   }

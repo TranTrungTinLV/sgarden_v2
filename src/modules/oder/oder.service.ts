@@ -28,8 +28,16 @@ export class OrderService {
     private readonly levelService: LevelMemberService,
   ) {}
 
-  async createOrder(user: User, createOrderDto: oderDto): Promise<Order> {
-    const customer = await this.userService.findOne(user.username);
+  async createOrder(user: User | null, createOrderDto: oderDto): Promise<Order> {
+    let customer = null;
+    let customer_id = null;
+    if(user){
+      customer = await this.userService.findOne(user.username);
+      if (!customer) {
+        throw new NotFoundException(`Customer not found`);
+      }
+      customer_id = customer._id;
+    }
   if (!createOrderDto || !Array.isArray(createOrderDto.products) || createOrderDto.products.length === 0) {
     throw new NotFoundException('Order data is missing or products is not iterable');
   }
@@ -74,7 +82,7 @@ export class OrderService {
   
     // Tạo đơn hàng mới với tổng giá đã được tính toán
     const order = new this.orderModel({
-      customer_id: customer._id,
+      customer_id: customer_id,
       items: createOrderDto.products.map(p => ({
         product: p.productId,
         quantity: p.quantity
@@ -169,12 +177,7 @@ export class OrderService {
   
   // statical
    //statical order
-   async getStaticalOrder(startDate: Date, endDate: Date, filterType: string): Promise<any>{
-    // const aggregationPipeline = [
-    //   {
-        
-    //   }
-    // ]
+   async getStaticalOrder(startDate: Date, endDate: Date, filterType: string): Promise<any> {
     return await this.orderModel.aggregate([
       {
         $match: {
@@ -183,19 +186,32 @@ export class OrderService {
         }
       },
       {
+        $addFields: {
+          isGuestOrder: {
+            $cond: { if: { $eq: ["$customer_id", null] }, then: 'Khách vãng lai', else: "khách đã đăng nhập" }
+          }
+        }
+      },
+      {
         $group: {
           _id: {
-            $dateTrunc: {
-              date: "$createdAt",
-              unit: filterType
-            }
+            date: {
+              $dateTrunc: {
+                date: "$createdAt",
+                unit: filterType
+              }
+            },
+            isGuestOrder: "$isGuestOrder"
           },
           count: { $sum: 1 },
           totalRevenue: { $sum: "$total_price" }
         }
       }
-  ]). exec()
+    ]).exec();
   }
+  
+  
+  
 
 
   }
