@@ -6,7 +6,6 @@ import { DiscountCode } from 'src/modules/discountcode/schema/discountcode.schem
 import { LevelMemberService } from 'src/modules/level-member/level-member.service';
 import { Product } from 'src/modules/product/schema/product.schema';
 import { UsersService } from 'src/modules/users/users.service';
-import { generateQRCode } from 'src/utils/generate_qRcode.ultils';
 
 // import { UpdateOrderDto, oderDto } from './dto/oder-dto';
 import { User } from '../users/schema/users.schema';
@@ -215,6 +214,4 @@ export class OrderService {
 
 
   }
-
-
 
