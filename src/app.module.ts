@@ -19,6 +19,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { CountdownModule } from './modules/countdown/countdown.module';
 import { PriceModule } from './modules/price/price.module';
+import { SlideModule } from './modules/slide/slide.module';
+import { SlideShowModule } from './slide-show/slide-show.module';
 
 @Module({
   imports: [
@@ -48,7 +50,9 @@ import { PriceModule } from './modules/price/price.module';
     LevelMemberModule,
     MailerModule,
     CountdownModule,
-    PriceModule
+    PriceModule,
+    SlideModule,
+    SlideShowModule
   ],
 })
 export class AppModule {}

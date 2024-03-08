@@ -2,8 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, Types } from 'mongoose';
 import { Category } from 'src/modules/category/schema/category.schema';
 import { Order } from 'src/modules/oder/schema/oder.schema';
-import { Review } from './product_review.schema';
 import { Price } from 'src/modules/price/schema/price.schema';
+
+import { Review } from './product_review.schema';
 // import { User } from 'src/users/schema/users.schema';
 
 @Schema({
