@@ -13,7 +13,8 @@ export class SlideService {
 
     //create slide
     async create(createSlideDto: CreateSlideDto): Promise<Slide>{
-        const newSlide = await this.slideModel.create(createSlideDto)
+        const newSlide = await this.slideModel.create(createSlideDto);
+        
         return newSlide
     }
     //get slide
