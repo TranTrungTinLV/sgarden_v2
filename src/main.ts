@@ -29,6 +29,7 @@ async function bootstrap() {
     .addTag('Order')
     .addTag('CountDown')
     .addTag('Slide')
+    .addTag('Slideshows')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
