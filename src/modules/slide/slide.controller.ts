@@ -25,29 +25,29 @@ export class SlideController {
     if(file){
       createSlideDto.image = `/images/slide/${file.filename}`
     }
-    return this.slideService.create(createSlideDto)
+    return this.slideService.createSlide(createSlideDto)
   }
 
-  @Roles([Role.Admin])
-  @Get()
-  getAll():Promise<Slide[]> {
-    return this.slideService.getAllSlide()
-  }
+  // @Roles([Role.Admin])
+  // @Get()
+  // getAll():Promise<Slide[]> {
+  //   return this.slideService.getAllSlide()
+  // }
 
-  @Roles([Role.Admin])
-  @UseInterceptors(FileInterceptor('image',multerOptions('slide')))
-  @Put(':id')
-  updateSlide(@Param('id') id: string,@Body() slideUpdateDto: CreateSlideDto, @UploadedFile() file: Express.Multer.File): Promise<Slide>{
-    if(file){
-      slideUpdateDto.image = `/images/slide/${file.filename}`
-    }
-    return this.slideService.updateSlide(id,slideUpdateDto)
-  }
+  // @Roles([Role.Admin])
+  // @UseInterceptors(FileInterceptor('image',multerOptions('slide')))
+  // @Put(':id')
+  // updateSlide(@Param('id') id: string,@Body() slideUpdateDto: CreateSlideDto, @UploadedFile() file: Express.Multer.File): Promise<Slide>{
+  //   if(file){
+  //     slideUpdateDto.image = `/images/slide/${file.filename}`
+  //   }
+  //   return this.slideService.updateSlide(id,slideUpdateDto)
+  // }
   
-  @Roles([Role.Admin])
-  @UseInterceptors(FileInterceptor('image',multerOptions('slide')))
-  @Delete(':id')
-  deleteSlide(@Param('id') id:string){
-    return this.slideService.deleteSlide(id)
-  }
+  // @Roles([Role.Admin])
+  // @UseInterceptors(FileInterceptor('image',multerOptions('slide')))
+  // @Delete(':id')
+  // deleteSlide(@Param('id') id:string){
+  //   return this.slideService.deleteSlide(id)
+  // }
 }

@@ -1,4 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsMongoId, IsOptional } from "class-validator";
 import mongoose from "mongoose";
 
 @Schema({
@@ -17,6 +19,11 @@ export class Slide {
 
     @Prop({type: mongoose.Schema.Types.String, required: true})
     navigate_link: string
+
+    @ApiProperty({ required: false })
+    @IsMongoId()
+    @IsOptional()
+    slideshowId?: string; // Thêm trường này
 }
 
 export const SlideSchema = SchemaFactory.createForClass(Slide)

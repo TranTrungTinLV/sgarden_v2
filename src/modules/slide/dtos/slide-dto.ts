@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString } from "class-validator";
+import { IsMongoId, IsOptional, IsString } from "class-validator";
 
 
 export class CreateSlideDto {
@@ -19,5 +19,9 @@ export class CreateSlideDto {
     @IsString()
     readonly navigate_link: string;
 
+    @ApiProperty({ required: false })
+    @IsMongoId()
+    @IsOptional()
+    slideshowId?: string; // Thêm trường này
 
 }
