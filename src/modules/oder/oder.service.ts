@@ -93,7 +93,10 @@ export class OrderService {
   
     // Lưu đơn hàng và trả về
     await order.save();
-    return order.populate('products', 'name');
+    return order.populate({
+      path: 'items.product', 
+      select: 'name images',
+    });
   }
 
   async findAll(): Promise<Order[]> {
