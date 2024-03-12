@@ -3,7 +3,7 @@ name: Auto Push Images
 on:
   push:
     paths:
-      - 'path/to/images/**'
+      - 'storage/images/**'
 
 jobs:
   push-images:
@@ -19,6 +19,6 @@ jobs:
       
       - name: Commit and Push Images
         run: |
-          git add path/to/storage/*
+          git add storage/images/*
           git commit -m "Auto-push new images"
           git push
