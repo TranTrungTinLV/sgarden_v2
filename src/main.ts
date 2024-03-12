@@ -36,7 +36,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  app.use('/images', express.static('public'))
+  app.use('/images', express.static('storage'))
   await app.listen(3001).then(() => {
     console.log('successfully deploy server');
   });
