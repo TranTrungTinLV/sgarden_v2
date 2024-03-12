@@ -29,16 +29,16 @@ export class IntroductionController {
   // }
   
   //http://localhost:3001/introduction/images/introductions/2be3b29c-16a8-48d5-9189-493eee790406.jpg
-  @Public()
-  @Get('images/introductions/:file')
-  async getPicture(@Param('file') file, @Res() res: Response) {
-    if(!file){
-      res.statusMessage
-    }
-    const imagePath = join(process.cwd(), 'images/introductions', file);
-    console.log('imagePath', imagePath)
-    res.sendFile(imagePath);
-  }
+  // @Public()
+  // @Get('images/introductions/:file')
+  // async getPicture(@Param('file') file, @Res() res: Response) {
+  //   if(!file){
+  //     res.statusMessage
+  //   }
+  //   const imagePath = join(process.cwd(), 'images/introductions', file);
+  //   console.log('imagePath', imagePath)
+  //   res.sendFile(imagePath);
+  // }
 
   @Post('')
   @Roles([Role.Admin])
