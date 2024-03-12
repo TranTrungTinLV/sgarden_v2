@@ -11,12 +11,15 @@ import { Role } from '../users/schema/users.schema';
 import { IntroductionDto } from './dto/create-introdution';
 import { IntroductionService } from './introduction.service';
 import { Introduction } from './schema/introduction.shcema';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 @ApiSecurity('bearerAuth')
 @ApiTags('Introduction')
 @Controller('introduction')
 export class IntroductionController {
-  constructor(private introductionService: IntroductionService) {}
-
+  constructor(
+    private introductionService: IntroductionService,
+    private cloudinaryService: CloudinaryService
+    ) {}
 
   @Get()
   @Public()
@@ -62,9 +65,26 @@ export class IntroductionController {
     @Body() introductionDto: IntroductionDto,
   ): Promise<Introduction> {
     if(file){
-      introductionDto.image = `images/introductions/${file.filename}`
-      console.log(file)
-      console.log("ok")
+
+      // introductionDto.image = `images/introductions/${file.filename}`
+      // console.log(file)
+      // console.log("ok")
+
+      // Upload lên Cloudinary và lấy URL
+    const cloudinaryResult = await this.cloudinaryService.uploadFile(file);
+    const cloudinaryUrl = cloudinaryResult.url;
+
+    
+    
+    // Lưu trữ local
+    const localPath = `images/introductions/${file.filename}`;
+
+    // Lưu trữ cả hai đường dẫn trong một trường dưới dạng JSON
+    introductionDto.image = JSON.stringify({
+      cloudinary: cloudinaryUrl,
+      local: localPath,
+    });
+      
     }
     return this.introductionService.createOrUpdate(introductionDto);
   }
