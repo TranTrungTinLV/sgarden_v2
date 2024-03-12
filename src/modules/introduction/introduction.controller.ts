@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import {FileInterceptor} from '@nestjs/platform-express'
-import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { join } from 'path';
 import { Roles } from 'src/common/decators/roles.decorator';
@@ -42,6 +42,20 @@ export class IntroductionController {
 
   @Post('')
   @Roles([Role.Admin])
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        title: {type: 'string'},
+        content: {type: 'string'},
+        image: {
+          type: 'string',
+          format: 'binary'
+        }
+      }
+    }
+  })
   @UseInterceptors(FileInterceptor('image',multerOptions('introductions')))
   async createIntroduction(
     @UploadedFile() file: Express.Multer.File,

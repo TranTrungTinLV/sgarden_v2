@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import  helmet from 'helmet'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -12,6 +13,13 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname,'..','storage'),{
     prefix: 'images\introductions'
   })
+  // app.use(
+  //   helmet({
+  //     contentSecurityPolicy: isProduction ? undefined : false,
+  //     crossOriginEmbedderPolicy: isProduction ? undefined : false,
+  //     crossOriginResourcePolicy: false,
+  //   }),
+  // );
   const config = new DocumentBuilder()
     .setTitle('SGARDEN')
     .setDescription('List API tesing for Sgarden foods by Levi')
