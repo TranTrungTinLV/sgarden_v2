@@ -9,17 +9,19 @@ import  helmet from 'helmet'
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors();
+  
   //Serve static 
   app.useStaticAssets(join(__dirname,'..','storage'),{
     prefix: 'images\introductions'
   })
-  // app.use(
-  //   helmet({
-  //     contentSecurityPolicy: isProduction ? undefined : false,
-  //     crossOriginEmbedderPolicy: isProduction ? undefined : false,
-  //     crossOriginResourcePolicy: false,
-  //   }),
-  // );
+  const isProduction = process.env.NODE_ENV === 'production';
+  app.use(
+    helmet({
+      contentSecurityPolicy: isProduction ? undefined : false,
+      crossOriginEmbedderPolicy: isProduction ? undefined : false,
+      crossOriginResourcePolicy: false,
+    }),
+  );
   const config = new DocumentBuilder()
     .setTitle('SGARDEN')
     .setDescription('List API tesing for Sgarden foods by Levi')
