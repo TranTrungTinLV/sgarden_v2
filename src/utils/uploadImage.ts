@@ -29,30 +29,30 @@ console.log('Upload path:', destPath);
             }
         },
 
-        getLocalPath: (file: Express.Multer.File) => {
-            const fileName = `${uuid()}${extname(file.originalname)}`;
-            return `storage/images/${folder}/${fileName}`;
-        },
+        // getLocalPath: (file: Express.Multer.File) => {
+        //     const fileName = `${uuid()}${extname(file.originalname)}`;
+        //     return `storage/images/${folder}/${fileName}`;
+        // },
         // Storage properties
-        // storage: diskStorage({
-        //     // Destination storage path details
-        //     destination: (req: any, file: any, cb: any) => {
-        //         const uploadPath = destPath;
-        //         // Create folder if doesn't exist
-        //         if (!existsSync(uploadPath)) {
-        //             mkdirSync(uploadPath);
-        //         }
-        //         cb(null, uploadPath);
-        //     },
-        //     // File modification details
-        //     filename: (req: any, file: any, cb: any) => {
-        //         // Calling the callback passing the random name generated with the original extension name
-        //         cb(null, `${uuid()}${extname(file.originalname)}`);
-        //     },
-        // }),
+        storage: diskStorage({
+            // Destination storage path details
+            destination: (req: any, file: any, cb: any) => {
+                const uploadPath = destPath;
+                // Create folder if doesn't exist
+                if (!existsSync(uploadPath)) {
+                    mkdirSync(uploadPath);
+                }
+                cb(null, uploadPath);
+            },
+            // File modification details
+            filename: (req: any, file: any, cb: any) => {
+                // Calling the callback passing the random name generated with the original extension name
+                cb(null, `${uuid()}${extname(file.originalname)}`);
+            },
+        }),
 
         //memory server
-        storage: memoryStorage()
+        // storage: memoryStorage()
     }
     // Enable file size limits
    

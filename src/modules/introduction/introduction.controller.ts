@@ -66,24 +66,24 @@ export class IntroductionController {
   ): Promise<Introduction> {
     if(file){
 
-      // introductionDto.image = `images/introductions/${file.filename}`
-      // console.log(file)
-      // console.log("ok")
+      introductionDto.image = `images/introductions/${file.filename}`
+      console.log(file)
+      console.log("ok")
 
       // Upload lên Cloudinary và lấy URL
-    const cloudinaryResult = await this.cloudinaryService.uploadFile(file);
-    const cloudinaryUrl = cloudinaryResult.url;
+    // const cloudinaryResult = await this.cloudinaryService.uploadFile(file);
+    // const cloudinaryUrl = cloudinaryResult.url;
 
     
     
-    // Lưu trữ local
-    const localPath = `images/introductions/${file.filename}`;
+    // // Lưu trữ local
+    // const localPath = `images/introductions/${file.filename}`;
 
-    // Lưu trữ cả hai đường dẫn trong một trường dưới dạng JSON
-    introductionDto.image = JSON.stringify({
-      cloudinary: cloudinaryUrl,
-      local: localPath,
-    });
+    // // Lưu trữ cả hai đường dẫn trong một trường dưới dạng JSON
+    // introductionDto.image = JSON.stringify({
+    //   cloudinary: cloudinaryUrl,
+    //   local: localPath,
+    // });
       
     }
     return this.introductionService.createOrUpdate(introductionDto);
