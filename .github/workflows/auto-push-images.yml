@@ -19,7 +19,7 @@ jobs:
       
       - name: Commit and Push Images
         run: |
-          git add storage/images/**/* || echo "No new images to add"
+          git add storage/images/ || echo "No new images to add"
           git diff --staged --quiet || git commit -m "Auto-push new images"
           git push
         shell: /usr/bin/bash -e {0}
