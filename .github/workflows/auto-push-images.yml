@@ -17,7 +17,7 @@ jobs:
           git config --global user.email "sgod.dev001@gmail.com"
           git config --global user.name "SgodDev001"
       
-     - name: Commit and Push Images
+      - name: Commit and Push Images
         run: |
           git add storage/images/**/* || echo "No new images to add"
           git diff --staged --quiet || git commit -m "Auto-push new images"
