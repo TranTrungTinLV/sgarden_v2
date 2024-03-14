@@ -19,6 +19,6 @@ jobs:
       
       - name: Commit and Push Images
         run: |
-          git add storage/images/**/*
+          git add storage/images/
           git commit -m "Auto-push new images"
           git push
