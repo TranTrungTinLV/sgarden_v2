@@ -14,14 +14,7 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname,'..','storage'),{
     prefix: 'images\introductions'
   })
-  const isProduction = process.env.NODE_ENV === 'production';
-  app.use(
-    helmet({
-      contentSecurityPolicy: isProduction ? undefined : false,
-      crossOriginEmbedderPolicy: isProduction ? undefined : false,
-      crossOriginResourcePolicy: false,
-    }),
-  );
+ 
   const config = new DocumentBuilder()
     .setTitle('SGARDEN')
     .setDescription('List API tesing for Sgarden foods by Levi')
@@ -43,7 +36,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  app.use('/images', express.static('public'))
+  app.use('/images', express.static('storage'))
   await app.listen(3001).then(() => {
     console.log('successfully deploy server');
   });
