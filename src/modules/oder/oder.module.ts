@@ -12,6 +12,7 @@ import { OderController } from './oder.controller';
 import { OrderService } from './oder.service';
 import { OderSchema } from './schema/oder.schema';
 import { ProductModule } from 'src/modules/product/product.module';
+import { PaymentModule } from '../payment/payment.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ProductModule } from 'src/modules/product/product.module';
     ProductModule,
     DiscountcodeModule,
     LevelMemberModule,
+    PaymentModule,
     MongooseModule.forFeature([
       {
         name: 'Order',

@@ -11,6 +11,7 @@ import { UsersService } from 'src/modules/users/users.service';
 import { User } from '../users/schema/users.schema';
 import { oderDto } from './dto/oder-dto';
 import { Order, OrderStatus } from './schema/oder.schema';
+import { PaymentService } from '../payment/payment.service';
 
 
 @Injectable()
@@ -25,6 +26,7 @@ export class OrderService {
     private readonly userService: UsersService,
     private disCountCodeService: DiscountcodeService,
     private readonly levelService: LevelMemberService,
+    private readonly paymentService: PaymentService
   ) {}
 
   async createOrder(user: User | null, createOrderDto: oderDto): Promise<Order> {
@@ -93,6 +95,7 @@ export class OrderService {
   
     // Lưu đơn hàng và trả về
     await order.save();
+    this.paymentService.createPayment(total)
     return order.populate({
       path: 'items.product', 
       select: 'name images',

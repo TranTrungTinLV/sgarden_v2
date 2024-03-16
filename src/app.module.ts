@@ -21,7 +21,7 @@ import { CountdownModule } from './modules/countdown/countdown.module';
 import { PriceModule } from './modules/price/price.module';
 import { SlideModule } from './modules/slide/slide.module';
 import { SlideShowModule } from './modules/slide-show/slide-show.module';
-import { PaymentModule } from './payment/payment.module';
+import { PaymentModule } from './modules/payment/payment.module';
 
 @Module({
   imports: [

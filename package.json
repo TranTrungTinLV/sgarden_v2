@@ -32,6 +32,7 @@
     "@nestjs/serve-static": "^4.0.1",
     "@nestjs/swagger": "^7.1.17",
     "@nestjs/throttler": "^5.1.1",
+    "@types/paypal-rest-sdk": "^1.7.9",
     "@types/qrcode": "^1.5.5",
     "@types/uuid": "^9.0.7",
     "apollo-server-express": "^3.13.0",
@@ -50,6 +51,7 @@
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
+    "paypal-rest-sdk": "^1.8.1",
     "qrcode": "^1.5.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
