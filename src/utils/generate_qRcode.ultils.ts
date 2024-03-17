@@ -1,25 +1,32 @@
+import axios from "axios";
 import * as QRCode from "qrcode";
+import * as pako from 'pako';
+import {VietQR} from 'vietqr';
+ 
 
-export async function generateQRCode(data: string, options?: QRCode.QRCodeToDataURLOptions): Promise<string> {
-    try {
-        // // Định nghĩa tùy chọn mặc định
-        // const defaultOptions = {
-        //     errorCorrectionLevel: 'H', // Chỉ định kiểu dữ liệu chính xác
-        //     type: 'image/jpeg',
-        //     quality: 0.3,
-        //     margin: 1,
-        //     color: {
-        //         dark: "#000000",
-        //         light: "#ffffff"
-        //     }
-        // };
 
-        // // Gộp options
-        // const mergedOptions = { ...defaultOptions, ...options };
+export async function generateVietQRCode(accountInfo): Promise<string> {
+  const url = 'https://api.vietqr.io/v2/generate';
+  const clientId = '904d1f14-eab6-4aa0-ae4d-bc11eeee7d08';
+  const apiKey = '9c28db2d-a43b-4d77-a362-0a01668d6c6c';
 
-        return QRCode.toDataURL(data);
-    } catch (error) {
-        console.error('Error generating QR Code', error);
-        throw error;
-    }
+  try {
+    const response = await axios.post(url, accountInfo, {
+      headers: {
+        'x-client-id': clientId,
+        'x-api-key': apiKey,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // Assuming the QR code data is directly in the response body
+    // Adjust this line based on the actual structure of the response
+    const qrCodeData = JSON.stringify(response.data); // Adjust this according to the actual response structure
+
+    console.log('VietQR Code generated successfully:', qrCodeData);
+    return qrCodeData; // Return only the QR code data
+  } catch (error) {
+    console.error('Error generating VietQR Code:', error);
+    throw error;
+  }
 }

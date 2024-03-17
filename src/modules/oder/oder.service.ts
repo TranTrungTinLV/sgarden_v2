@@ -12,11 +12,12 @@ import { User } from '../users/schema/users.schema';
 import { oderDto } from './dto/oder-dto';
 import { Order, OrderStatus } from './schema/oder.schema';
 import { PaymentService } from '../payment/payment.service';
-import { generateQRCode } from 'src/utils/generate_qRcode.ultils';
-
+import {  generateVietQRCode } from 'src/utils/generate_qRcode.ultils';
+import { VietQR } from 'vietqr';
 
 @Injectable()
 export class OrderService {
+  private vietQR: VietQR
   constructor(
     @InjectModel(Order.name) private readonly orderModel: mongoose.Model<Order>,
     @InjectModel(User.name) private readonly userModel: mongoose.Model<User>,
@@ -27,8 +28,13 @@ export class OrderService {
     private readonly userService: UsersService,
     private disCountCodeService: DiscountcodeService,
     private readonly levelService: LevelMemberService,
-    private readonly paymentService: PaymentService
-  ) {}
+    private readonly paymentService: PaymentService,
+  ) {
+    this.vietQR = new VietQR({
+      clientID: '904d1f14-eab6-4aa0-ae4d-bc11eeee7d08',
+      apiKey: '9c28db2d-a43b-4d77-a362-0a01668d6c6c',
+    });
+  }
 
   async createOrder(user: User | null, createOrderDto: oderDto): Promise<Order> {
     let customer = null;
@@ -93,14 +99,21 @@ export class OrderService {
       status: OrderStatus.PENDING,
       // Các trường khác...
     });
+
+    const accountInfo = {
+  "accountNo": "39024517",
+  "accountName": "TRAN TRUNG TIN",
+  "acqId": 970416,
+  "amount": total,
+  "addInfo": "SGOD",
+  "format": "text",
+  "template": "qr_only"
+};
  
 
-    const qrData = {total_price: total , username: user?.username , bankName: "Ngân hàng TMCP Ngoại Thương Việt Nam (Vietcombank)", branch: "Chi nhánh Thành phố Hồ Chí Minh",
-    accountNumber: "123456789",
-    accountName: "NGUYEN VAN A"}
 
-    const qrCode = await generateQRCode(JSON.stringify(qrData));
-
+  const qrCode = await generateVietQRCode(JSON.stringify(accountInfo));
+    console.log('qrCode',qrCode)
     order.QRCode = qrCode;
   
     // Lưu đơn hàng và trả về
