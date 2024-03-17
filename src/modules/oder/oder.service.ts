@@ -12,6 +12,7 @@ import { User } from '../users/schema/users.schema';
 import { oderDto } from './dto/oder-dto';
 import { Order, OrderStatus } from './schema/oder.schema';
 import { PaymentService } from '../payment/payment.service';
+import { generateQRCode } from 'src/utils/generate_qRcode.ultils';
 
 
 @Injectable()
@@ -92,6 +93,15 @@ export class OrderService {
       status: OrderStatus.PENDING,
       // Các trường khác...
     });
+ 
+
+    const qrData = {total_price: total , username: user?.username , bankName: "Ngân hàng TMCP Ngoại Thương Việt Nam (Vietcombank)", branch: "Chi nhánh Thành phố Hồ Chí Minh",
+    accountNumber: "123456789",
+    accountName: "NGUYEN VAN A"}
+
+    const qrCode = await generateQRCode(JSON.stringify(qrData));
+
+    order.QRCode = qrCode;
   
     // Lưu đơn hàng và trả về
     await order.save();
