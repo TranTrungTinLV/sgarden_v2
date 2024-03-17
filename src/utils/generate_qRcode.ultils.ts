@@ -21,7 +21,7 @@ export async function generateVietQRCode(accountInfo): Promise<string> {
 
     // Assuming the QR code data is directly in the response body
     // Adjust this line based on the actual structure of the response
-    const qrCodeData = JSON.stringify(response.data); // Adjust this according to the actual response structure
+    const qrCodeData = JSON.stringify(response.data.data.qrDataURL); // Adjust this according to the actual response structure
 
     console.log('VietQR Code generated successfully:', qrCodeData);
     return qrCodeData; // Return only the QR code data
