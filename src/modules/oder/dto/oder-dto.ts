@@ -50,11 +50,12 @@ export class oderDto {
   @IsNumber()
   readonly quantity?: number;
 
+
   @ApiProperty({ example: 'sgarden_2025', description: 'Mã giảm giá nếu có không thì thôi', required: false })
   @IsString()
   @IsOptional()
   readonly discountCode: string;
 
   @IsString()
-  size: string// M, L, hoặc N (not set)
+  readonly size?: string// M, L, hoặc N (not set)
 }

@@ -52,7 +52,7 @@ export class OrderService {
   const { products } = createOrderDto;
 
   let total = 0;
-
+  let f_Size;
   for (const { productId, size, quantity } of products) {
     const product = await this.productModel.findById(productId);    
     if (!product) {
@@ -61,12 +61,15 @@ export class OrderService {
 
     let finalPrice = product.price_new;
     // const priceSize = product.prices.find(price => price.size === size);
-    
+
 
     if (size) {
       const priceSize = product.prices.find(price => price.size === size);
       if (priceSize) {
         finalPrice = priceSize.new_price; // Nếu có kích thước, cập nhật giá dựa trên kích thước
+        console.log(finalPrice);
+        f_Size = priceSize.size
+        
       }
       if (!priceSize) {
         throw new NotFoundException(`Size ${size} not found for product ${productId}`);
@@ -93,12 +96,14 @@ export class OrderService {
       customer_id: customer_id,
       items: createOrderDto.products.map(p => ({
         product: p.productId,
-        quantity: p.quantity
+        quantity: p.quantity,
+        size: f_Size
       })),
       total_price: discountedTotal,
       status: OrderStatus.PENDING,
       // Các trường khác...
     });
+    console.log(order)
 
     const accountInfo = {
   "accountNo": "39024517",
@@ -115,13 +120,14 @@ export class OrderService {
   const qrCode = await generateVietQRCode(JSON.stringify(accountInfo));
     console.log('qrCode',qrCode)
     order.QRCode = qrCode;
-  
+    // order.size = 
     // Lưu đơn hàng và trả về
     await order.save();
     this.paymentService.createPayment(total)
-    return order.populate({
+    return await order.populate({
       path: 'items.product', 
-      select: 'name images',
+      select: 'name images prices',
+     
     });
   }
 
@@ -137,8 +143,10 @@ export class OrderService {
       }
     }).populate({
       path: 'items.product',
-      select: 'name images',
-      
+      select: 'name images',  
+    }).populate({
+      path: 'items',
+      select: 'size'
     }).exec();
     return order;
   }

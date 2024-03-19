@@ -63,15 +63,19 @@ export class Order extends Document {
 
   @Prop([{ 
     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-    quantity: Number
+    quantity: Number,
+    size: {type: mongoose.Schema.Types.String}
   }])
-  items: { product: Types.ObjectId, quantity: number }[];
+  items: { product: Types.ObjectId, quantity: number, size: string }[];
   //cancel
   @Prop({type: mongoose.Schema.Types.String})
   status: string;
 
   @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'DiscountCode'})
   discountCode: DiscountCode | Types.ObjectId; //đây là discount
+
+  @Prop({type: mongoose.Schema.Types.String})
+  size: string;
   // @Prop([{ 
   //   product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
   //   quantity: Number
