@@ -26,7 +26,8 @@ import { PaymentModule } from './modules/payment/payment.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'storage'),
+      rootPath: join(__dirname, '..', 'storage/images'),
+      serveRoot: '/images/'
   }),
     ConfigModule.forRoot({
       envFilePath: '.env',
