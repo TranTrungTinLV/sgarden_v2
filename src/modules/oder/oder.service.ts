@@ -131,6 +131,16 @@ export class OrderService {
     });
   }
 
+  //find by order to slug
+  async findOrderBySlug(slug: string): Promise<Order> {
+    const order = await this.orderModel.findOne({ slug: slug }).exec();
+    if (!order) {
+      throw new NotFoundException(`Order with slug ${slug} not found.`);
+    }
+    return order;
+  }
+
+
   async findAll(): Promise<Order[]> {
     const order = await this.orderModel
     .find()

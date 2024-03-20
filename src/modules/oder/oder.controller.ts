@@ -61,6 +61,12 @@ export class OderController {
     console.log(user)
     return this.orderService.findOrderBysUserId(user.id);
   }
+  
+  @Get('/history/:slug')
+  @Public()
+async getOrderHistoryBySlug(@Param('slug') slug: string): Promise<Order> {
+  return this.orderService.findOrderBySlug(slug);
+}
 
   @Get(':orderId')
   @Roles([Role.Admin])
