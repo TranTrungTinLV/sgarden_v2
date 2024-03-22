@@ -58,7 +58,7 @@ export class AuthController {
 
   @Public()
   @Post('forgot-password')
-  @ApiOperation({ summary: 'Quên mật khẩu', description: 'Gửi yêu cầu đặt lại mật khẩu' })
+  @ApiOperation({ summary: 'Quên mật khẩu gửi mật khẩu mới về mail đã đăng ký', description: 'Gửi yêu cầu đặt lại mật khẩu' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
@@ -75,7 +75,7 @@ export class AuthController {
 
   @Public()
   @Post('reset-password')
-  @ApiOperation({ summary: 'Quên mật khẩu', description: 'Gửi yêu cầu đặt lại mật khẩu' })
+  @ApiOperation({ summary: 'lấy mật khẩu đó để vào newPassword và nhập mail vừa yêu cầu gửi mật khẩu', description: 'Gửi yêu cầu đặt lại mật khẩu' })
   @ApiBody({
     schema: {
       type: 'object',
