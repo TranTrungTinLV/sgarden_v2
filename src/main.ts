@@ -33,6 +33,7 @@ async function bootstrap() {
     .addTag('CountDown')
     .addTag('Slide')
     .addTag('Slideshows')
+    .addTag('Footer')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

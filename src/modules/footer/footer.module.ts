@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { FooterService } from './header.service';
-import { HeaderController } from './header.controller';
+import { FooterService } from './footer.service';
+import { HeaderController } from './footer.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 // import { HeaderSchema } from './schema/footer.schema';
 import { UsersModule } from 'src/modules/users/users.module';

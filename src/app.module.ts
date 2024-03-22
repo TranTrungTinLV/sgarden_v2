@@ -22,7 +22,7 @@ import { PriceModule } from './modules/price/price.module';
 import { SlideModule } from './modules/slide/slide.module';
 import { SlideShowModule } from './modules/slide-show/slide-show.module';
 import { PaymentModule } from './modules/payment/payment.module';
-import { FooterModule } from './modules/header/footer.module';
+import { FooterModule } from './modules/footer/footer.module';
 
 @Module({
   imports: [

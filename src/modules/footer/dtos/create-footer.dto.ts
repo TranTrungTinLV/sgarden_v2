@@ -5,16 +5,16 @@ import { IsString } from "class-validator";
 export class FooterDto { 
     @ApiProperty({
         description: 'logo',
-        required: true
+        required:true   
     })
-    @IsString()
+    @IsString({})
     logo?:string
 
     @ApiProperty({
         description: 'số điện thoại',
         required: true
     })
-    phome?:string
+    phone?:string
 
     @ApiProperty({
         description: 'địa chỉ',
