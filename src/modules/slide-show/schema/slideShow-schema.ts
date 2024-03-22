@@ -5,8 +5,7 @@ import { Slide } from 'src/modules/slide/schema/slide-schema';
 
 @Schema({timestamps:true})
 export class Slideshow {
-  @Prop({ required: true })
-  title: string;
+
 
   @Prop({ default: false })
   is_show: boolean;

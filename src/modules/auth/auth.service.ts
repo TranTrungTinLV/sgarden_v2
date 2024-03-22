@@ -16,10 +16,11 @@ export class AuthService {
     private readonly mailService: MailerService
   ) {}
 
-  async login(username: string, pwd: string) { //đăng nhập
+  async login(loginIdentifier: string, pwd: string) { //đăng nhập
     // const { email, password } = loginDto;
 
-    const user = await this.usersService.findOneWithPassword(username);
+    // const user = await this.usersService.findOneWithPassword(username);
+    const user = await this.usersService.findOneWithEmailorUserName(loginIdentifier)
     console.log(user)
     // Kiểm tra nếu không tìm thấy người dùng
   if (!user) {
@@ -39,7 +40,7 @@ export class AuthService {
       throw new UnauthorizedException("thông tin đăng nhập không chính xác");
     }
     // The "sub" (subject) claim identifies the principal that is the subject of the JWT
-    const payload = { username: username, sub: user._id, role: user.role };
+    const payload = { username: loginIdentifier, sub: user._id, role: user.role };
     const accessToken = this.jwtService.sign(payload,{expiresIn: '1d'}) // sau 5 phút đăng nhập lại
     const refreshToken = this.jwtService.sign(payload,{expiresIn: '7d'}) //trả về cái này đăng nhập trả về user
 
@@ -53,6 +54,8 @@ export class AuthService {
     };
   }
 
+
+  
   async forgotPassword(email: string): Promise<void> {
     const user = await this.usersService.findOneByEmail(email);
     if (!user) {

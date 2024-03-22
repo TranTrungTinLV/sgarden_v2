@@ -15,7 +15,7 @@ import { Role } from 'src/modules/users/schema/users.schema';
 import { oderDto } from './dto/oder-dto';
 import { OrderService } from './oder.service';
 import { Order } from './schema/oder.schema';
-import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { Public } from 'src/common/decorators/public.decorations';
 import { AuthGuard } from '@nestjs/passport';
@@ -29,11 +29,44 @@ import { OptionalAuthGuard } from 'src/common/guard/option-gaurd';
 export class OderController {
   constructor(private readonly orderService: OrderService) {}
 
+  @ApiConsumes('multipart/form-data')
   @Post()
   // @Roles([Role.User,Role.Admin])
   @UseGuards(OptionalAuthGuard)
   @Public()
   @ApiOperation({ summary: 'order món', description: 'Yêu cầu role: User, mã giảm giá discountcode có thì user nhập vào không có thì thôi không bắt buộc nhập ' })
+  @ApiBody({
+    description: 'Order new',
+    schema: {
+      type: 'object',
+      
+      properties: {
+        products: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              productId: {type: 'string'},
+              size: {type: 'string'},
+              quantity: {type: 'number'},
+              discountCode: {type: 'string', default: false}
+            }
+          }
+        }
+      }
+    }
+
+    // schema:{
+    //   type: 'array',
+    //   properties: {
+    //     productId: {type: 'string'},
+    //     size: {type: 'string'},
+    //     quantity: {type: 'number'},
+    //     discountCode: {type: 'string', default: false}
+    //   }
+    // } 
+    
+  })
   async createOrder(@Body() createOrderDto: oderDto, @Req() request: any) {
     console.log(createOrderDto);
     const user = request.user ? request.user : null; 

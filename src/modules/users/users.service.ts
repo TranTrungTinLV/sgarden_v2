@@ -59,6 +59,19 @@ export class UsersService {
     }, { new: true }).exec();
   }
 
+  async findOneWithEmailorUserName(loginIndentifier: string){
+    return await this.UserModel.findOne(
+      {
+        $or: [{
+          email: loginIndentifier
+        },
+      {
+        username: loginIndentifier
+      }]
+      }
+    )
+  }
+
   async findOneWithPassword(username: string) {
     const user = await this.UserModel.findOne({ username });
     return user;

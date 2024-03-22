@@ -13,4 +13,9 @@ export class LoginDto {
   @IsString()
   @MinLength(6)
   readonly password: string;
+
+  @ApiProperty({description: "Nhap email"})
+  @IsNotEmpty()
+  @IsEmail()
+  readonly email: string;
 }

@@ -22,6 +22,7 @@ import { PriceModule } from './modules/price/price.module';
 import { SlideModule } from './modules/slide/slide.module';
 import { SlideShowModule } from './modules/slide-show/slide-show.module';
 import { PaymentModule } from './modules/payment/payment.module';
+import { FooterModule } from './modules/header/footer.module';
 
 @Module({
   imports: [
@@ -55,7 +56,8 @@ import { PaymentModule } from './modules/payment/payment.module';
     PriceModule,
     SlideModule,
     SlideShowModule,
-    PaymentModule
+    PaymentModule,
+    FooterModule
   ],
 })
 export class AppModule {}
