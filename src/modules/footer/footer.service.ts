@@ -13,8 +13,20 @@ export class FooterService {
 
 
     async createFooter(createFooterDto : FooterDto): Promise<Footer> {
-        const newFooter = this.FooterModel.create(createFooterDto)
-        return await newFooter;
+        const existingFooter = await this.FooterModel.findOne();
+        if(existingFooter) {
+            const updateFooter = await this.FooterModel.findByIdAndUpdate(existingFooter,createFooterDto,{new: true});
+            return updateFooter;
+        } else {
+
+            const count = await this.FooterModel.countDocuments();
+            if(count === 0) {
+                const newFooter = await this.FooterModel.create(createFooterDto);
+                return newFooter
+            } else {
+                throw new Error(`Đã tồn tại trường Footer này, không thể tạo thêm`);
+            }
+        }
     }
 }
 
