@@ -127,7 +127,6 @@ export class OrderService {
     return await order.populate({
       path: 'items.product', 
       select: 'name images prices',
-     
     });
   }
 

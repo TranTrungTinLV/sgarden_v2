@@ -8,6 +8,7 @@ import mongoose from 'mongoose';
 import { MailerService } from 'src/modules/mailer/mailer.service';
 import { User } from 'src/modules/users/schema/users.schema';
 import { UsersService } from 'src/modules/users/users.service';
+import { ChangePasswordDto } from './dto/change-password.dto';
 @Injectable()
 export class AuthService {
   constructor(
@@ -96,6 +97,23 @@ async resetPassword(token: string, newPassword: string): Promise<void> {
     }
     throw error;
   }
+}
+
+//Thay đổi mật khẩu khi đã đăng nhập
+async changePassword(userId: string, changePasswordDto: ChangePasswordDto):Promise<any>{
+  const user = await this.usersService.findOneById(userId)
+  console.log(user)
+  const encryptOldPassword = crypto.createHash('sha256').update(changePasswordDto.oldpassword).digest('hex');
+  console.log(encryptOldPassword)
+  if(user.password !== encryptOldPassword) {
+    throw new UnauthorizedException('Mật khẩu cũ của bạn không chính xác')
+  }
+
+  const encryptNewPassword = crypto.createHash('sha256').update(changePasswordDto.newpassword).digest('hex');
+  console.log(encryptNewPassword);
+  user.password = encryptNewPassword;
+  await user.save()
+  return { message: 'Mật khẩu đã được thay đổi thành công.' };
 }
 
 

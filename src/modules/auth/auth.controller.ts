@@ -1,17 +1,18 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiProperty, ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/common/decators/roles.decorator';
 import { Public } from 'src/common/decorators/public.decorations';
 import { RolesGuard } from 'src/common/guard/roles.gaurd';
 import { Role, User } from 'src/modules/users/schema/users.schema';
 import { UsersService } from 'src/modules/users/users.service';
-
-import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login-dto';
-import { UpdateUser } from '../users/dto/update-user.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/utils/uploadImage';
+
+import { UpdateUser } from '../users/dto/update-user.dto';
+import { AuthService } from './auth.service';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { LoginDto } from './dto/login-dto';
 
 @ApiTags('Auth')
 @UseGuards(RolesGuard)
@@ -170,4 +171,12 @@ export class AuthController {
     }
     return this.userService.updateUser(req.user.id,updateUserDto)
   }
+
+  @ApiOperation({summary: 'Khi người dùng đăng nhập thì mới được thay đổi mật khẩu, lấy token đăng nhập bỏ vào Beearer token'})
+  @ApiConsumes('multipart/form-data')
+  @Post('change-password')
+  @UseGuards(AuthGuard('jwt'))
+async changePassword(@Req() req, @Body() changePasswordDto: ChangePasswordDto) {
+  return this.authService.changePassword(req.user.id, changePasswordDto);
+}
 }
