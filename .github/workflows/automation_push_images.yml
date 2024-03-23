@@ -1,0 +1,25 @@
+name: Auto Push Images
+
+on:
+  push:
+    paths:
+      - 'storage/images/**'
+
+jobs:
+  push-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Configure Git
+        run: |
+          git config --global user.email "trungtintin1989@gmail.com"
+          git config --global user.name "TranTrungTinLV"
+      
+      - name: Commit and Push Images
+        run: |
+            git add storage/images/**/* || echo "No new images to add"
+            git diff --staged --quiet || git commit -m "Auto-push new images"
+            git push https://${{ secrets.GH_PAT }}@github.com/TranTrungTinLV/sgarden_v2.git
+        shell: /usr/bin/bash -e {0}
