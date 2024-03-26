@@ -37,14 +37,23 @@ export class RegistorService {
 
     // Check if the username or email is already taken
     const existingUser = await this.userModel.findOne({ username });
-    const existingEmail = await this.userModel.findOne({ email });
+    // const existingEmail = await this.userModel.findOne({ email });
+    let existingEmail = null;
+    if (email) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      existingEmail = await this.userModel.findOne({ email: email });
+    }
+
+    if (existingEmail) {
+      throw new ConflictException('Email already taken');
+    }
 
     if (existingUser) {
       throw new ConflictException('Username already taken');
     }
-    if (existingEmail) {
-      throw new ConflictException('Email already taken');
-    }
+    // if (existingEmail) {
+    //   throw new ConflictException('Email already taken');
+    // }
 
     const encryptedPassword = crypto
       .createHash('sha256')
@@ -55,11 +64,18 @@ export class RegistorService {
       username,
       password: encryptedPassword,
       role,
-      email: email ? email : '',
+
+  ...(email && { email }),
       slug
     });
-    await user.save();
-
+    try {
+      await user.save();
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new ConflictException('Email đã tồn tại');
+      }
+      throw error;
+    }
     const payload = { username: username, role:user.role, sub: user.id };
     return {
       access_token: await this.jwtService.signAsync(payload),

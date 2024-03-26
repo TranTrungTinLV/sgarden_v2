@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
@@ -23,6 +23,7 @@ import { SlideModule } from './modules/slide/slide.module';
 import { SlideShowModule } from './modules/slide-show/slide-show.module';
 // import { PaymentModule } from './modules/payment/payment.module';
 import { FooterModule } from './modules/footer/footer.module';
+import { rateLimitMiddleware } from './utils/rating-limit';
 
 @Module({
   imports: [
@@ -62,4 +63,10 @@ import { FooterModule } from './modules/footer/footer.module';
     FooterModule
   ],
 })
-export class AppModule {}
+export class AppModule{
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer
+  //     .apply(rateLimitMiddleware)
+  //     .forRoutes('auth/register'); // Áp dụng middleware cho route đăng ký
+  // }
+}

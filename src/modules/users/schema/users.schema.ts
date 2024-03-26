@@ -20,7 +20,7 @@ export class User extends Document {
     required: [true, 'Please enter userName'],
     unique: [true, "duy nhất 1 username"]
   })
-  username: string;
+  username?: string;
   @Prop(
     {
       type: mongoose.Schema.Types.String,
@@ -36,10 +36,10 @@ export class User extends Document {
   
   @Prop({
     type: mongoose.Schema.Types.String,
-    unique: [true, 'it exists'],
     required: [false],
+    unique: [true, "duy nhất 1 email"],
   })
-  email?: string | '';
+  email?: string | null;
   @Prop({
     type: mongoose.Schema.Types.String,
     required: [false, 'Please enter sex'],
