@@ -19,11 +19,11 @@ import { rateLimitMiddleware } from 'src/utils/rating-limit';
   providers: [RegistorService],
 })
 
-export class RegistorModule {}
-// export class RegistorModule implements NestModule{
-//   configure(consumer: MiddlewareConsumer) {
-//     consumer
-//       .apply(rateLimitMiddleware)
-//       .forRoutes('register'); // Áp dụng middleware cho route 'register'
-//   }
-// }
+// export class RegistorModule {}
+export class RegistorModule implements NestModule{
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(rateLimitMiddleware)
+      .forRoutes('register'); // Áp dụng middleware cho route 'register'
+  }
+}
