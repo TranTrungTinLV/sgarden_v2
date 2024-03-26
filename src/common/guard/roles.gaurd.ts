@@ -31,8 +31,15 @@ export class RolesGuard implements CanActivate {
     }
 
     const { user } = context.switchToHttp().getRequest();
-    const role = (await this.usersService.findOne(user?.username))?.role;
 
+    let foundUser;
+    if (user?.username) {
+      foundUser = await this.usersService.findOne(user.username);
+    } else if (user?.email) {
+      foundUser = await this.usersService.findOneByEmail(user.email);
+    }
+
+    const role = foundUser?.role;
     if (!requiredRoles.includes(role)) {
       console.log('loi');
       throw new UnauthorizedException();

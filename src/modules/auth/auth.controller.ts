@@ -34,7 +34,7 @@ export class AuthController {
     @ApiResponse({ status: HttpStatus.OK, description: 'Login successful' })
     @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Invalid credentials' })
   async login(@Body() loginDto: LoginDto) {
-    return await this.authService.login(loginDto.username, loginDto.password);
+    return await this.authService.login(loginDto.loginIdentifier, loginDto.password);
   }
 
   // @Patch(':userId/score')
