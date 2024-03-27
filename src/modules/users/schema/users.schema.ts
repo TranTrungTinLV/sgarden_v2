@@ -39,7 +39,7 @@ export class User extends Document {
     required: [false],
     unique: [true, "duy nhất 1 email"],
   })
-  email?: string | null;
+  email?: string;
   @Prop({
     type: mongoose.Schema.Types.String,
     required: [false, 'Please enter sex'],

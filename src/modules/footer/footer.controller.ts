@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FooterService } from './footer.service';
 import { Footer } from './schema/footer.schema';
 import { FooterDto } from './dtos/create-footer.dto';
@@ -7,7 +7,7 @@ import { Role } from 'src/modules/users/schema/users.schema';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/utils/uploadImage';
 import { RolesGuard } from 'src/common/guard/roles.gaurd';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 
 @ApiTags('Information')
@@ -44,4 +44,11 @@ export class FooterController {
     }
     return this.footerService.createFooter(createFooterDto)
   }
+
+  @Roles([Role.Admin])
+  @ApiOperation({description: "Lấy hết thông tin footer", summary: "Yêu cầu role: Admin"})
+  @Get()
+async getFooterInfo() {
+  return this.footerService.getFooterInfo();
+}
 }

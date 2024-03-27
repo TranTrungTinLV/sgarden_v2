@@ -11,7 +11,6 @@ export class FooterService {
         
     }
 
-
     async createFooter(createFooterDto : FooterDto): Promise<Footer> {
         const existingFooter = await this.FooterModel.findOne();
         if(existingFooter) {
@@ -28,6 +27,14 @@ export class FooterService {
             }
         }
     }
+
+    async getFooterInfo(): Promise<Footer> {
+        const footerInfo = await this.FooterModel.findOne();
+        if (!footerInfo) {
+          throw new Error('Footer information is not available.');
+        }
+        return footerInfo;
+      }
 }
 
 

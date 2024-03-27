@@ -35,7 +35,7 @@ async function bootstrap() {
     legacyHeaders: false, //vô hiệu hóa này đọc tài liệu chưa tới
   })  
   app.use(limmiter)
-  app.set('trust proxy', true);
+  app.set('trust proxy', 1);
 
 
   const config = new DocumentBuilder()
