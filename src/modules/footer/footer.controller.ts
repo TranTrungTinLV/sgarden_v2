@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FooterService } from './footer.service';
 import { Footer } from './schema/footer.schema';
 import { FooterDto } from './dtos/create-footer.dto';
@@ -18,16 +18,19 @@ export class FooterController {
   constructor(private readonly footerService: FooterService) {}
 
   @Roles([Role.Admin])
-  @Post()
+  @Put()
   @UseInterceptors(FileInterceptor('logo',multerOptions('logosFooter')))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
+    required: true,
     schema: {
       type: 'object',
       properties: {
         logo: {
+          // required: true,
           type: 'string',
           format: 'binary',
+          
         },
         phone: {type: 'string'},
         address: {type: 'string'},

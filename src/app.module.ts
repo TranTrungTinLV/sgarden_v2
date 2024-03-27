@@ -23,7 +23,7 @@ import { SlideModule } from './modules/slide/slide.module';
 import { SlideShowModule } from './modules/slide-show/slide-show.module';
 // import { PaymentModule } from './modules/payment/payment.module';
 import { FooterModule } from './modules/footer/footer.module';
-import { rateLimitMiddleware } from './utils/rating-limit';
+// import { rateLimitMiddleware } from './utils/rating-limit';
 
 @Module({
   imports: [

@@ -19,6 +19,14 @@ export async function generateVietQRCode(accountInfo): Promise<string> {
       }
     });
 
+    if (response.data.code === "00") {
+      console.log("Gen VietQR successful!", response.data);
+      // Xử lý hiển thị mã QR hoặc thông tin liên quan cho người dùng
+    } else {
+      console.error("Error generating QR Code:", response.data.desc);
+      // Xử lý hiển thị thông báo lỗi cho người dùng
+    }
+
     // Assuming the QR code data is directly in the response body
     // Adjust this line based on the actual structure of the response
     const qrCodeData = JSON.stringify(response.data.data.qrDataURL); // Adjust this according to the actual response structure

@@ -28,14 +28,14 @@ async function bootstrap() {
 
   //rating limit request client
   // tránh DDos
-  const limmiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 phút
-    max: 100, //giới hạn 100 req mỗi IP máy tính
-    standardHeaders: true, //trả về thông tin rating limit
-    legacyHeaders: false, //vô hiệu hóa này đọc tài liệu chưa tới
-  })  
-  app.use(limmiter)
-  app.set('trust proxy', 1);
+  // const limmiter = rateLimit({
+  //   windowMs: 15 * 60 * 1000, // 15 phút
+  //   max: 100, //giới hạn 100 req mỗi IP máy tính
+  //   standardHeaders: true, //trả về thông tin rating limit
+  //   legacyHeaders: false, //vô hiệu hóa này đọc tài liệu chưa tới
+  // })  
+  // app.use(limmiter)
+  // app.set('trust proxy', 1);
 
 
   const config = new DocumentBuilder()

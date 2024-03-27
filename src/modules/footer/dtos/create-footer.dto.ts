@@ -5,26 +5,26 @@ import { IsString } from "class-validator";
 export class FooterDto { 
     @ApiProperty({
         description: 'logo',
-        required: true
+        default: true
     })
     @IsString()
-    logo?:string
+    logo:string
 
     @ApiProperty({
         description: 'số điện thoại',
-        required: true
+        default: true
     })
-    phone?:string
+    phone:string
 
     @ApiProperty({
         description: 'địa chỉ',
-        required: true
+        default: true
     })
     address:string
 
     @ApiProperty({
         description: 'Google Map',
-        required: true
+        default: [true,"vui long nhap"]
     })
     maps:string
 }

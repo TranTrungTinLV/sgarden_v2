@@ -9,7 +9,7 @@ import { Public } from 'src/common/decorators/public.decorations';
 
 import { CreateRegistorDto } from './dto/create-registor.dto';
 import { RegistorService } from './registor.service';
-import { rateLimitMiddleware } from 'src/utils/rating-limit';
+// import { rateLimitMiddleware } from 'src/utils/rating-limit';
 
 
 @ApiTags('Register')
