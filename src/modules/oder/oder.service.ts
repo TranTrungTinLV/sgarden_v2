@@ -220,7 +220,7 @@ export class OrderService {
     order.status = newStatus;
     await order.save();
   
-    if (newStatus === 'CONFIRMED') { // Sử dụng giá trị thực tế cho trạng thái xác nhận
+    if (newStatus === 'CONFIRMED' && order.customer_id) { // Sử dụng giá trị thực tế cho trạng thái xác nhận
       await this.userService.addPoints(order.customer_id._id, pointsToAdd);
     }
   
