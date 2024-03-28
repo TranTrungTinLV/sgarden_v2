@@ -8,6 +8,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/utils/uploadImage';
 import { RolesGuard } from 'src/common/guard/roles.gaurd';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { Public } from 'src/common/decorators/public.decorations';
 
 
 @ApiTags('Information')
@@ -48,7 +49,7 @@ export class FooterController {
     return this.footerService.createFooter(createFooterDto)
   }
 
-  @Roles([Role.Admin])
+  @Public()
   @ApiOperation({description: "Lấy hết thông tin footer", summary: "Yêu cầu role: Admin"})
   @Get()
 async getFooterInfo() {
